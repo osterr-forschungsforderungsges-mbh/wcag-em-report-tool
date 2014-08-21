@@ -1,6 +1,6 @@
 'use strict';
 angular.module('wcagReporter')
-.directive('pageResults', function(directivePlugin, selectedCasesOnlyFilter) {
+.directive('pageResults', function(directivePlugin, selectedCasesOnlyFilter, $animate) {
     
 	return directivePlugin({
         restrict: 'E',
