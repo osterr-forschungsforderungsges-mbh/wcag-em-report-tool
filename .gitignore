@@ -8,3 +8,4 @@ app/bower_components
 desktop.ini
 Thumbs.db
 /.project
+dist/
