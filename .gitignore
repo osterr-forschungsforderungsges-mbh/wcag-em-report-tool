@@ -1,3 +1,4 @@
+dist/
 node_modules
 .tmp
 .sass-cache
@@ -8,4 +9,3 @@ app/bower_components
 desktop.ini
 Thumbs.db
 /.project
-dist/
