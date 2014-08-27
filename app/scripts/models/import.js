@@ -4,9 +4,11 @@
  * Originally created by Justin Marsan
  * https://github.com/justinmarsan/wcag.json
  */
-angular.module('wcagReporter').factory('wcagReporterImport',
-			function($rootScope, evalModel, currentUser) {
+angular.module('wcagReporter')
+.factory('wcagReporterImport',
+function($rootScope, evalModel, currentUser, reportStorage) {
 	var jsonld = window.jsonld;
+
 
 	function objectCollide(obj1, obj2) {
 		Object.keys(obj1).forEach(function (prop) {
@@ -16,6 +18,7 @@ angular.module('wcagReporter').factory('wcagReporterImport',
 			}
 		});
 	}
+
 
 	function compactEach(callback) {
 		var testCallback,
@@ -51,14 +54,14 @@ angular.module('wcagReporter').factory('wcagReporterImport',
 		};
 	}
 
+
 	/**
 	 * Inject evaluation data into the reporter
 	 * @param {[Object]} evalData
 	 */
 	function updateEvalModel(evalData) {
 		if (evalData.evaluationScope) {
-			objectCollide(evalModel.scopeModel,
-						  evalData.evaluationScope);
+			objectCollide(evalModel.scopeModel, evalData.evaluationScope);
 		}
 		
 		evalModel.id = evalData.id;
@@ -70,19 +73,29 @@ angular.module('wcagReporter').factory('wcagReporterImport',
 		evalModel.exploreModel.importData(evalData);
 	}
 
-	return {
+	var importModel = {
+
+		storage: reportStorage,
+
 		/**
 		 * Import an evaluation from a JSON string
 		 * @param  {string} json Evaluation
 		 */
 		fromJson: function (json) {
-			this.fromObject(angular.fromJson(json));
-		}, 
+			importModel.fromObject(angular.fromJson(json));
+		},
+
+		getFromUrl: function () {
+			return reportStorage.get()
+			.then(function (data) {
+				importModel.fromJson(data);
+				return data;
+			});
+		},
 
 		fromObject: function (evalData) {
-			var self = this;
 			jsonld.expand(evalData, function(err, expanded) {
-				self.fromExpanded(expanded);
+				importModel.fromExpanded(expanded);
 			});
 		},
 
@@ -128,4 +141,6 @@ angular.module('wcagReporter').factory('wcagReporterImport',
 			}));
 		}
 	};
+	
+	return importModel;
 });

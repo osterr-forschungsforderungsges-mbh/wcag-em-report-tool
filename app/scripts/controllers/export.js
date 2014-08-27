@@ -1,19 +1,33 @@
 'use strict';
 
 angular.module('wcagReporter')
-.controller('ExportCtrl', function ($scope, wcagReporterExport, reportStorage) {
+.controller('ExportCtrl', function ($scope, wcagReporterExport) {
 
-    $scope.exportUrl = wcagReporterExport.getBlob();
+    $scope.exportUrl = wcagReporterExport.getBlobUrl();
     $scope.exportFile = wcagReporterExport.getFileName();
-    $scope.url = 'http://example.com/?a11y=1234';
-    $scope.postJson = function (url) {
-    	var q = reportStorage.post(url);
-    	q.success(function (data, status, headers, config) {
-    		console.log(data, status, headers, config);
+    $scope.postSettings = wcagReporterExport.storage.settings;
+    $scope.posted = false;
+    $scope.failure = false;
+    $scope.success = false;
+    
+    $scope.postJson = function () {
+        $scope.posted = true;
+        $scope.failure = false;
 
-    	}).error(function (data, status, headers, config) {
-    		console.log(data, status, headers, config);
-    	});
+        wcagReporterExport.saveToUrl()
+        .then(function () {
+            $scope.success = true;
+            $scope.posted = false;
+
+        }, function (data) {
+            $scope.failure = (data ? data : true);
+            $scope.posted = false;
+        });
     };
 
+    $scope.openBlobIE = wcagReporterExport.saveBlobIE;    
+
+    $scope.updateSettings = function () {
+        wcagReporterExport.storage.updateSettings();
+    };
 });

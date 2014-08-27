@@ -1,5 +1,6 @@
 $textcolor-light: #767676;
 $brand-primary: #2570B0;
+$navbar-default-link-color: #727272;
 $font-size-base: 15px;
 $panel-body-padding: 7px 15px;
 $gray-light: #767676;
@@ -28,6 +29,11 @@ table {
     td, th {
         border:solid 1px #dddddd;
         padding: .2em .5em;
+
+        > p:only-child {
+            padding:0;
+            margin:0;
+        }
     }
     input[type=text] {
         width:100%;
@@ -48,12 +54,19 @@ table {
 
 input, textarea, select {
     &.form-control {
+        @include gradient-vertical(#EEE, #FAFAFA, 0, 15px);
+        &:focus {
+            @include gradient-vertical(#EEE, #FFF, 0, 15px);
+        }
+    }
+    @include gradient-vertical(#EEE, #FAFAFA, 0, 15px);
+    &:focus {
         @include gradient-vertical(#EEE, #FFF, 0, 15px);
     }
-    @include gradient-vertical(#EEE, #FFF, 0, 15px);
 }
 
-p a {
+p a,
+li a {
     text-decoration:underline;
 }
 
@@ -62,6 +75,10 @@ p a {
 }
 button[disabled] {
     color:gray;
+    font-style:italic;
+}
+.no-selection {
+    text-align:center;
     font-style:italic;
 }
 

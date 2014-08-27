@@ -9,24 +9,25 @@
     label="{{'LABEL_INFO' | translate}}" target="inf_str_sample"></info-button>
   </h2>
 
-  <info-field ref="inf_str_sample" exitto=""
-  button="{{'LABEL_CLOSE_INFO' | translate}}">
+  <info-field ref="inf_str_sample" button="{{'LABEL_CLOSE_INFO' | translate}}">
     <p ng-bind-html="'INF_STRUCT_SAMPLE' | translateAndLink
     : ['INF_STRUCT_SAMPLE_0', 'http://www.w3.org/TR/WCAG-EM/#step3a']"></p>
   </info-field>
 
   
-  <p><button-collapse target="rootHide" property="essentialFunctionality">
+  <h3><button-collapse target="rootHide" property="essentialFunctionality">
       {{ 'LABEL_ESSENT_FUNC' | translate }}
-  </button-collapse></p>
+  </button-collapse></h3>
   <div class="alert alert-warning" collapse="rootHide.essentialFunctionality"
   ng-bind-html="exploreModel.essentialFunctionality | txtToHtml"></div>
 
-  <p><button-collapse target="rootHide" property="pageTypeVariety">
+  <h3><button-collapse target="rootHide" property="pageTypeVariety">
       {{ 'LABEL_VARIETY_PAGE_TYPES' | translate }}
-  </button-collapse></p>
+  </button-collapse></h3>
   <div class="alert alert-warning" collapse="rootHide.pageTypeVariety"
   ng-bind-html="exploreModel.pageTypeVariety | txtToHtml"></div>
+
+  <h3>{{ 'HD_STRUCT_SAMPLE_SUB' | translate }}</h3>
 
   <input-pages pages="structuredSample.webpage" add-page="addPage(structuredSample)"
   remove-page="removePage(structuredSample)"></input-pages>
@@ -36,7 +37,7 @@
     label="{{'LABEL_INFO' | translate}}" target="inf_rand_sample"></info-button>
   </h2>
   
-  <info-field ref="inf_rand_sample" exitto="" button="{{'LABEL_CLOSE_INFO' | translate}}">
+  <info-field ref="inf_rand_sample" button="{{'LABEL_CLOSE_INFO' | translate}}">
     <p ng-bind-html="'INF_RAND_SAMPLE' | translateAndLink
     : ['INF_RAND_SAMPLE_0', 'http://www.w3.org/TR/WCAG-EM/#step3b']"></p>
   </info-field>
@@ -54,14 +55,4 @@
 </form>
 
 
-<footer><ul class="nav nav-pills">
-  <li><a href="#/audit/explore">
-      <span class="glyphicon glyphicon-chevron-left"></span>
-      {{'PREV_STEP' | translate}}
-  </a></li>
-  <li class="pull-right active">
-    <a href="#/audit/test" ng-click="processInput()">
-      {{'NEXT_STEP' | translate}} 
-      <span class="glyphicon glyphicon-chevron-right"></span>
-  </a></li>
-</ul></footer>
+<nav ng-include src="'views/step-buttons.html'"></nav>

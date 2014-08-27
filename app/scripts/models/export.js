@@ -4,7 +4,7 @@
  * https://github.com/justinmarsan/wcag.json
  */
 angular.module('wcagReporter')
-.factory('wcagReporterExport', function(evalModel) {
+.factory('wcagReporterExport', function(evalModel, reportStorage) {
 
 	function getJsonLd () {
 		var jsonLd = {
@@ -12,53 +12,69 @@ angular.module('wcagReporter')
 			type: 'evaluation',
 			'id': evalModel.id
 		};
-		angular.extend(jsonLd, evalModel.reportModel.exportData());
 		
 		jsonLd.evaluationScope =  evalModel.scopeModel.exportData();
 		jsonLd.auditResult =  evalModel.testModel.exportData();
 
-		angular.extend(jsonLd, evalModel.sampleModel.exportData());
-		angular.extend(jsonLd, evalModel.exploreModel.exportData());
+		angular.extend(jsonLd, 
+			evalModel.reportModel.exportData(),
+			evalModel.sampleModel.exportData(),
+			evalModel.exploreModel.exportData());
+		
 		return jsonLd;
 	}
+	
+	var exportModel = {
 
-	var reportModel = {
-		setAutoSave: function (options) {
-			console.log('autosave set', options);
+		storage: reportStorage,
+
+		saveToUrl: function () {
+			return reportStorage.post(exportModel.getJson());
 		},
 
 		getJson: function () {
-			return [getJsonLd()].concat(evalModel.otherData);
+			return { 
+				'@graph': [getJsonLd()].concat(evalModel.otherData)
+			};
 		},
 
 		getString: function () {
-			return angular.toJson(this.getJson(), true);
+			return angular.toJson(exportModel.getJson(), true);
 		},
 
-		getBlob: function () {
-			return reportModel.makeBlob(
-				reportModel.getString(),
-				'application/json;charset=utf-8'
-			);
-		},
-
-		makeBlob: function (data, type) {
-			// Create a blob for that URL
-			var blob =  new Blob([ data ],{ type : type });
-			// Take the URL
+		getBlobUrl: function (blob) {
+			blob = blob || exportModel.getBlob();
 			return (window.URL || window.webkitURL).createObjectURL(blob);
 		},
 
-		getFileName: function () {
-			var title = evalModel.reportModel.title;
+		saveBlobIE: function (blob, filename) {
+			blob = blob || exportModel.getBlob();
+			filename = filename || exportModel.getFileName();
+
+			if (window.navigator.msSaveOrOpenBlob) {
+	            window.navigator.msSaveBlob(blob, filename);
+	        }
+		},
+
+		getBlob: function (data, type) {
+			data = data || exportModel.getString();
+			type = type || 'application/json;charset=utf-8';
+			return new Blob([data], { type: type });
+		},
+
+		getFileName: function (title, ext) {
+			title = title || evalModel.reportModel.title;
+			ext = ext || 'json';
 			if (title === '') {
 				title = 'evaluation';
 			}
 			return title.replace(/(^\-+|[^a-zA-Z0-9\/_| -]+|\-+$)/g, '')
             .toLowerCase()
-            .replace(/[\/_| -]+/g, '-') + '.json';
+            .replace(/[\/_| -]+/g, '-') + '.' + ext;
 		}
 	};
 
-	return reportModel;
+	reportStorage.exportModel = exportModel;
+
+	return exportModel;
 });
