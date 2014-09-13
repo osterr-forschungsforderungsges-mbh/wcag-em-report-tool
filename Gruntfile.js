@@ -17,6 +17,8 @@ module.exports = function (grunt) {
   
   // load plugins
   grunt.loadNpmTasks('grunt-json-angular-translate');
+  grunt.loadNpmTasks('grunt-lineending');
+  grunt.loadNpmTasks('grunt-html2js');
   
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -44,6 +46,32 @@ module.exports = function (grunt) {
       }
     },
 
+    lineending: {
+      crlfTranslateFile: {                   // Target
+        options: {              // Target options
+          eol: 'lf',
+          overwrite: true
+        },
+        files: {
+          '': ['<%= yeoman.app %>/scripts/locales/*.js']
+        }
+      }
+    },
+    
+    html2js: {
+      options: {
+        module: 'wert-templates',
+        quoteChar: '\'',
+        singleModule: true,
+        indentString: '',
+        base: '<%= yeoman.dist %>'
+      },
+      files: {
+        src: '<%= yeoman.dist %>/views/**/*.html',
+        dest: '<%= yeoman.dist %>/scripts/templates.js'
+      }
+    },
+    
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -60,7 +88,7 @@ module.exports = function (grunt) {
       },
       jsonAngularTranslate: {
         files: ['locales/*.json'],
-        tasks: ['jsonAngularTranslate:createJs']
+        tasks: ['jsonAngularTranslate:createJs', 'lineending']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -105,6 +133,7 @@ module.exports = function (grunt) {
           ]
         }
       },
+      
       dist: {
         options: {
           base: '<%= yeoman.dist %>'
@@ -142,6 +171,7 @@ module.exports = function (grunt) {
           ]
         }]
       },
+      distView: '<%= yeoman.dist %>/views',
       server: '.tmp'
     },
 
@@ -206,9 +236,8 @@ module.exports = function (grunt) {
       dist: {
         files: {
           src: [
-            '<%= yeoman.dist %>/scripts/{scripts,vendor}*.js',
+            '<%= yeoman.dist %>/scripts/*.js',
             '<%= yeoman.dist %>/styles/{,*/}*.css',
-            // '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
           ]
         }
       }
@@ -260,29 +289,29 @@ module.exports = function (grunt) {
       }
     },
 
-    svgmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
-
     htmlmin: {
+      options: {
+        removeComments: true,
+        collapseWhitespace: true,
+        conservativeCollapse: true,
+        collapseBooleanAttributes: true,
+        removeCommentsFromCDATA: true,
+        removeOptionalTags: true,
+        removeAttributeQuotes: true
+      },
       dist: {
-        options: {
-          collapseWhitespace: true,
-          collapseBooleanAttributes: true,
-          removeCommentsFromCDATA: true,
-          removeOptionalTags: true
-        },
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/**/*.html'],
+          src: ['*.html'],
+          dest: '<%= yeoman.dist %>'
+        }]
+      },
+      distView: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.dist %>',
+          src: ['views/**/*.html'],
           dest: '<%= yeoman.dist %>'
         }]
       }
@@ -323,8 +352,7 @@ module.exports = function (grunt) {
             '*.html',
             'views/**/*.html',
             'images/{,*/}*.{webp}',
-            'fonts/*',
-            'scripts/{dev_inject_dummydata,jsonld}.js',
+            'fonts/*'
           ]
         }, {
           expand: true,
@@ -357,8 +385,7 @@ module.exports = function (grunt) {
       ],
       dist: [
         'compass:dist',
-        'imagemin',
-        'svgmin'
+        'imagemin'
       ]
     },
 
@@ -379,14 +406,11 @@ module.exports = function (grunt) {
       options: {
         //sourceMap: true,
       },
-      jsonld: {
-        options: {
-          mangled: false
-        },
+      dist: {
         files: {
-          '<%= yeoman.dist %>/scripts/jsonld.js': [
-            '<%= yeoman.dist %>/scripts/jsonld.js'
-          ]
+          '<%= yeoman.dist %>/scripts/scripts.js': ['<%= yeoman.dist %>/scripts/scripts.js'],
+          '<%= yeoman.dist %>/scripts/templates.js': ['<%= yeoman.dist %>/scripts/templates.js'],
+          '<%= yeoman.dist %>/scripts/vendor.js': ['<%= yeoman.dist %>/scripts/vendor.js']
         }
       }
     },
@@ -411,6 +435,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'jsonAngularTranslate',
+      'lineending',
       'clean:server',
       'bowerInstall',
       'concurrent:server',
@@ -422,6 +447,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'jsonAngularTranslate',
+    'lineending',
     'clean:server',
     'concurrent:test',
     'autoprefixer',
@@ -431,6 +457,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'jsonAngularTranslate',
+    'lineending',
     'clean:dist',
     'bowerInstall',
     'useminPrepare',
@@ -441,10 +468,13 @@ module.exports = function (grunt) {
     'copy:dist',
     'cdnify',
     'cssmin',
+    'htmlmin:distView',
+    'html2js',
     'uglify',
     'rev',
     'usemin',
-    'htmlmin'
+    'clean:distView',
+    'htmlmin:dist'
   ]);
 
   grunt.registerTask('default', [

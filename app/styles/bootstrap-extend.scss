@@ -9,6 +9,23 @@ button.glyphicon-copy {
     height:23px;
 }
 
+body .btn-default {
+    border-color: #888;
+    background-color: $body-bg;
+}
+body .btn.btn-primary-invert {
+    background-color: $body-bg;
+    padding:5px 11px;
+}
+
+label {
+    display:inline;
+}
+
+.alert p:last-child {
+    margin-bottom: 0;
+}
+
 * a:focus,
 * button:focus,
 * .dropdown-toggle:focus {
@@ -52,6 +69,12 @@ button.glyphicon-copy {
     .visible-xs-and-sr {
         position:absolute !important;
         top:-9999em;
+    }
+}
+
+@media (max-width: $screen-sm-min) {
+    body .navbar-nav {
+        margin:7px 0;
     }
 }
 
