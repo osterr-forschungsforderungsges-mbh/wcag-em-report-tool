@@ -43,8 +43,12 @@ angular.module('wcagReporter')
 		},
 
 		getBlobUrl: function (blob) {
-			blob = blob || exportModel.getBlob();
-			return (window.URL || window.webkitURL).createObjectURL(blob);
+			try {
+				blob = blob || exportModel.getBlob();
+				return (window.URL || window.webkitURL).createObjectURL(blob);
+			} catch (e) {
+				console.error(e);
+			}
 		},
 
 		saveBlobIE: function (blob, filename) {
@@ -63,11 +67,11 @@ angular.module('wcagReporter')
 		},
 
 		getFileName: function (title, ext) {
-			title = title || evalModel.reportModel.title;
+			title = title || (evalModel.scopeModel.website.title +
+			' evaluation report');
 			ext = ext || 'json';
-			if (title === '') {
-				title = 'evaluation';
-			}
+			title = title.trim();
+			
 			return title.replace(/(^\-+|[^a-zA-Z0-9\/_| -]+|\-+$)/g, '')
             .toLowerCase()
             .replace(/[\/_| -]+/g, '-') + '.' + ext;

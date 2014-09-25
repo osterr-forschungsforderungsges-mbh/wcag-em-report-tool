@@ -27,6 +27,7 @@
   
   "YES": "Yes",
   "NO": "No",
+  "TO_TOP": "Back to top",
 
   "CLICK_EXPAND": "Click to show section",
   "CLICK_COLLAPSE": "Click to Hide section",
@@ -125,7 +126,7 @@
   "LABEL_PAGE_HANDLE": "Short page name",
 
   "ITEM": "Web page",
-  "NO_TEXT_PROVIDED": "- No text provided -",
+  "NO_TEXT_PROVIDED": "No text provided",
   "BTN_REMOVE_PAGE": "Remove page",
   "LABEL_INFO": "Info expand",
   "LABEL_CLOSE_INFO": "Close info",
@@ -202,7 +203,7 @@
   "RESULTS_OF": "Results of",
 
   "BTN_ADD_TECH": "Add web technology",
-  "BTN_REMOVE_TECH": "Remove web technology",
+  "BTN_REMOVE_TECH": "Remove technology",
   "BTN_ADD_PAGE": "Add web page or web page state",
   "BTN_START_EVAL": "Start a new evaluation report",
   "BTN_CONTINUE_EVAL": "Continue working on your open evaluation report",
@@ -216,6 +217,10 @@
   "BTN_DOWNLOAD_DATA_FILE": "Download and save",
   "BTN_BACK_TO_EVAL": "Back",
 
+  "BROWSER_NOT_SUPPORTED": "This web browser is not supported. You will not be able to use all features, which may include loading and saving. Use a web browser for which you have the latest version instead.",
+  "HIDE_MESSAGE": "Hide message",
+
   "PREV_STEP": "Previous step",
   "NEXT_STEP": "Next step"
+
 }

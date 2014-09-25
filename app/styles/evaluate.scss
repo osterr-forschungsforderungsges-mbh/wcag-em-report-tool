@@ -16,6 +16,31 @@
     font-size:75%;
 }
 
+.to-top {
+    text-align: right;
+    margin-top: -18px;
+    a {
+        text-decoration: underline;
+    }
+}
+.download-link {
+    min-width:300px;
+}
+
+.alert.alert-info.infobox {
+    margin-top:5px;
+    margin-bottom:10px;
+}
+
+.crit-detail-btn .btn {
+    width:100%;
+    padding:3px 15px;
+}
+
+.key-value-group {
+    margin-bottom:22px;
+}
+
 .step-buttons {
     padding: .5em .5em 0;
     margin-top: 1.5em;
@@ -29,20 +54,6 @@
     &:focus, &:hover {
         border-color:#1e5b8e;
         color:#1e5b8e;
-    }
-}
-
-.info-box {
-    position:relative;
-    .floater {
-        width:30px;
-        height:30px;
-        float:right;
-    }
-    .close {
-        position:absolute;
-        top:15px;
-        right:15px;
     }
 }
 
@@ -122,8 +133,27 @@ h3 .collapse-button {
 }
 
 .form-group-inline {
+    position:relative;
+    legend {
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: $font-size-base;
+    }
     .form-block {
         padding: 5px 0px 5px 15px;
+    }
+    @media (max-width: $screen-xs-max) {
+        margin-top:10px;
+
+        .remove-button {
+            position:absolute;
+            top:0;
+            right:15px;
+            margin-top: -10px;
+        }
+        .right-col {
+            padding-right:15px;
+        }
     }
     label {
         font-weight:normal;
@@ -134,7 +164,7 @@ h3 .collapse-button {
     }
 }
 .form-block-head {
-    padding:1em 0px 0px 15px;
+    padding:0 0 0 15px;
     font-weight:bold;
     text-align:center;
 }
