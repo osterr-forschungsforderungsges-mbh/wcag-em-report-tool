@@ -18,8 +18,8 @@
     </info-field>
     
     <input-pages pages="explore.commonPages"
-    add-page="addPage('commonPages')"
-    remove-page="removePage('commonPages')"></input-pages>
+    add-page="getPageAdder('commonPages')"
+    remove-page="getPageRemover('commonPages')"></input-pages>
   </div><!-- /form-group -->
 
   <div class="form-group">
@@ -86,6 +86,9 @@
       </div>
     </header>
   
+    <p ng-if="knownTech.length === 0" class="appear no-selection"><em>
+      {{:: 'NO_TECH_DEFINED' | translate}}
+    </em></p>
 
     <fieldset class="row form-group-inline appear" id="technologies"
     ng-repeat="tech in explore.reliedUponTechnology">
@@ -113,9 +116,10 @@
 
       <div ng-class="col3">
         <button ng-class="delButton"
-        ng-click="explore.reliedUponTechnology.splice($index,1)"
-        tooltip-trigger="focus blur mouseenter mouseleave"
-        tooltip="{{'BTN_REMOVE_TECH' | translate}}">
+        ng-click="removeTechnology($index, $event)"
+        tooltip="{{'BTN_REMOVE_TECH' | translate}}"
+        tooltip-animation="false"
+        tooltip-trigger="focus blur mouseenter mouseleave">
           <span class="sr-only">
             {{'BTN_REMOVE_TECH' | translate}}
           </span>
@@ -123,7 +127,7 @@
       </div>
     </fieldset><!-- /row -->
 
-    <button ng-click="addTechnology()" class="btn btn-default">
+    <button ng-click="addTechnology($event)" class="btn btn-default">
       <span class="glyphicon glyphicon-plus-sign"></span>
       {{'BTN_ADD_TECH' | translate }}
     </button>
@@ -141,8 +145,8 @@
     </info-field>
     
     <input-pages pages="explore.otherRelevantPages"
-    add-page="addPage('otherRelevantPages')"
-    remove-page="removePage('otherRelevantPages')"></input-pages>
+    add-page="getPageAdder('otherRelevantPages')"
+    remove-page="getPageRemover('otherRelevantPages')"></input-pages>
   </div><!-- /form-group -->
 
 </form>

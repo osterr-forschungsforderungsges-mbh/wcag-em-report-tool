@@ -1,5 +1,5 @@
-@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/_mixins.scss";
-@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/_variables.scss";
+@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_mixins.scss";
+@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_variables.scss";
 
 $wzrd-v-padding: 8px;
 $wzrd-h-padding: 5px;
@@ -7,7 +7,7 @@ $wzrd-border-rad: 8px;
 $wzrd-gap: 5px;
 $wzrd-arrow-size: floor($wzrd-v-padding + ($font-size-base/2) + 3px);
 $wzrd-v-padding-outer: 12px;
-$wzrd-bg: $panel-default-heading-bg;
+$wzrd-bg: #DFDFDF;
 $wzrd-indent: 1em;
 
 .wizard {
@@ -28,6 +28,10 @@ $wzrd-indent: 1em;
             margin:(0-$wzrd-v-padding) (0-$wzrd-h-padding);
             padding:$wzrd-v-padding $wzrd-h-padding;
             display:block;
+            color:$link-hover-color;
+        }
+        a:hover {
+            color:black;
         }
 
         &:before,

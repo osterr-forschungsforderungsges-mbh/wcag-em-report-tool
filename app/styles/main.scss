@@ -1,4 +1,5 @@
 $body-bg: #f5f5f5;
+$icon-font-path: 'bootstrap/';
 $wai-border-color: #930;
 $panel-bg: $body-bg;
 $list-group-bg: $body-bg;
@@ -8,7 +9,7 @@ $panel-default-heading-bg: #e8e8e8;
 $panel-default-border: #d6d6d6;
 $textcolor-light: #767676;
 $brand-primary: #2570B0;
-$navbar-default-link-color: #727272;
+$navbar-default-link-color: #6E6E6E;
 $font-size-base: 16px;
 $panel-body-padding: 7px 15px;
 $gray-light: #767676;
@@ -21,7 +22,7 @@ $focus-color: #477BA5;
 $alert-danger-border: #a94442;
 
 /* bower:scss */
-@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
+@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
 /* endbower */
 
 
@@ -32,27 +33,6 @@ input:-webkit-autofill {
     color:$brand-primary;
 }
 
-table {
-    border-collapse:collapse;
-    margin:0 auto;
-    min-width:65%;
-    
-    thead th { text-align:center }
-    tbody th { text-align:left } 
-
-    td, th {
-        border:solid 1px #dddddd;
-        padding: .2em .5em;
-
-        > p:only-child {
-            padding:0;
-            margin:0;
-        }
-    }
-    input[type=text] {
-        width:100%;
-    }
-}
 body legend {
     font-size: $font-size-base;
     margin-bottom: 5px;
@@ -106,10 +86,6 @@ li a {
 
 * {
     @include placeholder($textcolor-light);
-}
-.no-selection {
-    text-align:center;
-    font-style:italic;
 }
 
 $footer-height: 170px; 
@@ -178,11 +154,9 @@ body .branding {
     }
 }
 
-
 .navbar-nav.navbar-right:last-child {
     margin-right: 0;
 }
-
 
 @import "bootstrap-extend";
 
@@ -191,5 +165,3 @@ body .branding {
 @import "animation";
 
 @import "evaluate";
-
-@import "report";
