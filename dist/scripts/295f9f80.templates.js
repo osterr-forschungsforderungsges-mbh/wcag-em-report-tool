@@ -17,7 +17,7 @@ $templateCache.put('views/audit/sample.html',
 '    : [\'INF_RAND_SAMPLE_0\', \'http://www.w3.org/TR/WCAG-EM/#step3b\']\n' +
 '    : [\'INF_RAND_SAMPLE_1\', \'http://www.w3.org/TR/WCAG-EM/#states\']"></p></info-field><div class="alert alert-warning">{{ "RAND_SAMPLE_LENGTH" | translate | format : structuredSample.webpage.length : randPageCount() }}</div><input-pages pages=randomSample.webpage add-page=getPageAdder(randomSample) remove-page=getPageRemover(randomSample)></input-pages><h2>{{\'HD_RELIEDUP_TECH\' | translate }}&nbsp;<info-button label="{{\'LABEL_INFO\' | translate}}" target=inf_reliedup_tech></info-button></h2><info-field ref=inf_reliedup_tech button="Close info"><p ng-bind-html="\'INF_RELIEDUP_TECH\' | translateAndLink\n' +
 '    : [\'INF_RELIEDUP_TECH_0\', \'http://www.w3.org/TR/WCAG-EM/#step2d\']\n' +
-'    : [\'INF_RELIEDUP_TECH_1\', \'http://www.w3.org/TR/WCAG20/#reliedupondef\']"></p></info-field><p>{{:: \'INTRO_RELIEDUP_TECH\' | translate }}</p><div class="form-group key-value-group" ng-init="col0 = \'visible-xs col-xs-12 form-block-head\';\n' +
+'    : [\'INF_RELIEDUP_TECH_1\', \'http://www.w3.org/TR/WCAG20/#reliedupondef\']"></p></info-field><div class="form-group key-value-group" ng-init="col0 = \'visible-xs col-xs-12 form-block-head\';\n' +
 '           col1 = \'col-xs-9 col-sm-4 col-md-3 form-block right-col\';\n' +
 '           col2 = \'col-xs-9 col-sm-7 col-md-8 form-block right-col\';\n' +
 '           col3 = \'col-sm-1 form-block remove-button\';\n' +
