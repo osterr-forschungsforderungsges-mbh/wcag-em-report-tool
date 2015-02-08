@@ -38,7 +38,6 @@ angular.module('wcagReporter')
     exploreModel.reliedUponTechnology = [];
     
     exploreModel.addReliedUponTech = function () {
-        console.log(exploreModel.reliedUponTechnology);
         exploreModel.reliedUponTechnology.push({
             title: '', id: ''
         });
@@ -83,12 +82,14 @@ angular.module('wcagReporter')
 
     
     exploreModel.importData = function (evalData) {
+        if (typeof evalData.reliedUponTechnology === 'object') {
+            evalData.reliedUponTechnology = [evalData.reliedUponTechnology];
+        }
         basicProps.forEach(function (prop) {
             if (evalData[prop]) {
                exploreModel[prop] = evalData[prop];
             }
         });
-
         pageProps.forEach(function (prop) {
             if (!angular.isArray(evalData[prop])) {
                 exploreModel[prop] = [];
