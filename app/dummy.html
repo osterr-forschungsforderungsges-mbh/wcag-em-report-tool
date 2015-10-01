@@ -16,13 +16,14 @@
 url="http://wcag-em-reporter-tool.iriscouch.com/reports/1">
   <!-- Add your site or application content here -->
   <div class="page-view">
+    <div ng-include src="'views/navigation.html'"></div>
+
     <div class="not-w3c-notification" lang="en">
       The published version of this tool is available at
       <a href="http://www.w3.org/WAI/eval/report-tool/">
         www.w3.org/WAI/eval/report-tool/
       </a>. This page is intended for <em>previewing and testing purposes only</em>.
     </div>
-    <div ng-include src="'views/navigation.html'"></div>
 
     <div ng-view autoscroll="true" class="container reporter-view"></div>
     <div class="push-footer"></div>
@@ -34,16 +35,18 @@ url="http://wcag-em-reporter-tool.iriscouch.com/reports/1">
   <script src="bower_components/json3/lib/json3.min.js"></script>
   <![endif]-->
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>/libs/jquery/2.1.3/jquery.min.js"></script>
   <!-- build:js scripts/vendor.js -->
   <!-- bower:js -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/json3/lib/json3.js"></script>
-  <script src="bower_components/angular-resource/angular-resource.js"></script>
-  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-translate/angular-translate.js"></script>
   <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-tooltips/dist/angular-tooltips.min.js"></script>
+  <script src="bower_components/angular-translate/angular-translate.js"></script>
+  <script src="bower_components/json3/lib/json3.js"></script>
   <script src="bower_components/textarea-autosize/dist/jquery.textarea_autosize.js"></script>
   <!-- endbower -->
   <script src="scripts/ui-bootstrap-tpls.js"></script>
@@ -53,7 +56,7 @@ url="http://wcag-em-reporter-tool.iriscouch.com/reports/1">
 
   <!-- build:js({.tmp,app}) scripts/scripts.js -->
   <script src="scripts/app.js"></script>
-  <script src="scripts/locales/en.js"></script>
+  <script src="scripts/locales/default.js"></script>
 
   <script src="scripts/services/directivePlugin.js"></script>
   <script src="scripts/services/evalContext.js"></script>
@@ -74,24 +77,26 @@ url="http://wcag-em-reporter-tool.iriscouch.com/reports/1">
   <script src="scripts/directives/evaluate/infoField.js"></script>
   <script src="scripts/directives/evaluate/inputPages.js"></script>
   <script src="scripts/directives/evaluate/techSelect.js"></script>
+  <script src="scripts/directives/evaluate/iconButton.js"></script>
   <script src="scripts/directives/buttonCollapse.js"></script>
   <script src="scripts/directives/fullReport.js"></script>
   <script src="scripts/directives/successCriterion.js"></script>
   <script src="scripts/directives/stepbar.js"></script>
   <script src="scripts/directives/autoResize.js"></script>
+  <script src="scripts/directives/shyPlaceholder.js"></script>
 
   <script src="scripts/filters/escapeHTML.js"></script>
+  <script src="scripts/filters/makeId.js"></script>
   <script src="scripts/filters/selectedCasesOnly.js"></script>
   <script src="scripts/filters/rdfToLabel.js"></script>
   <script src="scripts/filters/txtToHtml.js"></script>
   <script src="scripts/filters/nlToBr.js"></script>
   <script src="scripts/filters/format.js"></script>
   <script src="scripts/filters/translateAndLink.js"></script>
-  <script src="scripts/filters/whereCriteriaVisible.js"></script>
 
   <script src="scripts/models/AppState.js"></script>
   <script src="scripts/models/wcag20spec.js"></script>
-  <script src="scripts/models/wcag20specData.js"></script>
+  <script src="wcag20spec/js/wcag20.en.js"></script>
   <script src="scripts/models/class/CriterionAssert.js"></script>
   <script src="scripts/models/class/TestCaseAssert.js"></script>
   <script src="scripts/models/class/Page.js"></script>
@@ -99,21 +104,23 @@ url="http://wcag-em-reporter-tool.iriscouch.com/reports/1">
   <script src="scripts/models/evaluation/currentUser.js"></script>
   <script src="scripts/models/evaluation/explore.js"></script>
   <script src="scripts/models/evaluation/sample.js"></script>
-  <script src="scripts/models/evaluation/test.js"></script>
+  <script src="scripts/models/evaluation/audit.js"></script>
   <script src="scripts/models/evaluation/report.js"></script>
   <script src="scripts/models/evaluation.js"></script>
   <script src="scripts/models/import.js"></script>
   <script src="scripts/models/export.js"></script>
 
   <script src="scripts/controllers/start.js"></script>
-  <script src="scripts/controllers/audit/scope.js"></script>
-  <script src="scripts/controllers/audit/explore.js"></script>
-  <script src="scripts/controllers/audit/sample.js"></script>
-  <script src="scripts/controllers/audit/test.js"></script>
+  <script src="scripts/controllers/evaluation/scope.js"></script>
+  <script src="scripts/controllers/evaluation/explore.js"></script>
+  <script src="scripts/controllers/evaluation/sample.js"></script>
+  <script src="scripts/controllers/evaluation/audit.js"></script>
+  <script src="scripts/controllers/evaluation/audit/criteria.js"></script>
+  <script src="scripts/controllers/evaluation/audit/samplePages.js"></script>
+  <script src="scripts/controllers/evaluation/report.js"></script>
   <script src="scripts/controllers/report.js"></script>
-  <script src="scripts/controllers/import.js"></script>
-  <script src="scripts/controllers/export.js"></script>
-  <script src="scripts/controllers/audit/finalize.js"></script>
+  <script src="scripts/controllers/open.js"></script>
+  <script src="scripts/controllers/save.js"></script>
   <script src="scripts/controllers/report/score.js"></script>
   <script src="scripts/controllers/report/criteria.js"></script>
   <!-- endbuild -->

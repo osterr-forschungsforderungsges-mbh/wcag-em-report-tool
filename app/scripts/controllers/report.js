@@ -5,7 +5,7 @@ angular.module('wcagReporter')
 		evalModel, wcag20spec, appState, wcagReporterExport) {
 	var htmlBlob;
 
-	$scope.state = appState.moveToState('save');
+	$scope.state = appState.moveToState('export');
     $scope.scope = evalModel.scopeModel;
     $scope.explore = evalModel.exploreModel;
 
@@ -13,7 +13,7 @@ angular.module('wcagReporter')
         return evalModel.sampleModel.getFilledPages();
     };
 
-    evalModel.testModel.updateToConformance();
+    evalModel.auditModel.updateToConformance();
 
 
     $scope.report = evalModel.reportModel;

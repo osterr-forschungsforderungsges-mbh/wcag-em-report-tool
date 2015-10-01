@@ -51,23 +51,13 @@ angular.module('wcagReporter')
     };
 
     sampleModel.addNewStructuredPage = function () {
-        var minRndSmpl, i,
-        sample = sampleModel.structuredSample,
+        var sample = sampleModel.structuredSample,
         page = new Page(),
         num = getAvailablePageNum(sample);
 
         sample.webpage.push(page);
         page.id = '_:struct_' + num;
         page.handle = '';
-
-        minRndSmpl = Math
-        .ceil(sample.webpage.length / 10);
-        i = minRndSmpl - sampleModel.randomSample.webpage.length;
-
-        while (i > 0) {
-            sampleModel.addNewRandomPage();
-            i -= 1;
-        }
         return page;
     };
 
@@ -83,9 +73,9 @@ angular.module('wcagReporter')
 
     sampleModel.addNewPage = function (sample) {
         if (sample === sampleModel.randomSample) {
-            sampleModel.addNewRandomPage();
+            return sampleModel.addNewRandomPage();
         } else {
-            sampleModel.addNewStructuredPage();
+            return sampleModel.addNewStructuredPage();
         }
     };
 
@@ -101,7 +91,7 @@ angular.module('wcagReporter')
 
     sampleModel.getPages = function () {
         return sampleModel.structuredSample.webpage
-            .concat(sampleModel.randomSample.webpage);
+        .concat(sampleModel.randomSample.webpage);
     };
 
     sampleModel.getFilledPages = function () {
@@ -111,17 +101,12 @@ angular.module('wcagReporter')
     };
 
     sampleModel.getSelectedPages = function () {
-        return sampleModel.getPages().filter(function (page) {
-            return page.selected === true;
-        });
-    };
-
-    sampleModel.getSelectedPages = function () {
-        return sampleModel.getPages().map(function (page) {
+        return sampleModel.getPages().reduce(function (arr, page) {
             if (page.selected) {
-                return page;
+                arr.push(page);
             }
-        });
+            return arr;
+        }, []);
     };
 
     /**

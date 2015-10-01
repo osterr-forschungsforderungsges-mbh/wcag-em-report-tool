@@ -14,12 +14,27 @@ module.exports = function (grunt) {
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
-  
+
+  var fs = require('fs');
+
   // load plugins
   grunt.loadNpmTasks('grunt-json-angular-translate');
   grunt.loadNpmTasks('grunt-lineending');
   grunt.loadNpmTasks('grunt-html2js');
-  
+  grunt.loadNpmTasks('grunt-concat-json');
+
+  var langPath    = 'app/locale/';
+  var defaultLang = grunt.option('lang') || 'en';
+  var langs = fs.readdirSync(langPath)
+  .reduce(function (langs, file) {
+    var stat = fs.statSync(langPath + file);
+    if (stat.isDirectory()) {
+      langs.push(file);
+    }
+    return langs;
+  }, []);
+
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -29,8 +44,19 @@ module.exports = function (grunt) {
       app: require('./bower.json').appPath || 'app',
       dist: 'dist'
     },
-    
+
     // Translations
+    'concat-json': (function () {
+        return langs.reduce(function (tasks, lang) {
+          tasks[lang] = {
+            cwd: 'app/locale/' + lang,
+            src: '*.json',
+            dest: '.tmp/locales/' + lang + '.json'
+          };
+          return tasks;
+        }, {});
+    }()),
+
     jsonAngularTranslate: {
       createJs: {
         options: {
@@ -38,26 +64,14 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: 'locales',
+          cwd: '.tmp/locales',
           src: '*.json',
-          dest: '<%= yeoman.app %>/scripts/locales',
+          dest: '.tmp/scripts/locales',
           ext: '.js'
         }]
       }
     },
 
-    lineending: {
-      crlfTranslateFile: {                   // Target
-        options: {              // Target options
-          eol: 'lf',
-          overwrite: true
-        },
-        files: {
-          '': ['<%= yeoman.app %>/scripts/locales/*.js']
-        }
-      }
-    },
-    
     html2js: {
       options: {
         module: 'wert-templates',
@@ -71,7 +85,7 @@ module.exports = function (grunt) {
         dest: '<%= yeoman.dist %>/scripts/templates.js'
       }
     },
-    
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -133,7 +147,7 @@ module.exports = function (grunt) {
           ]
         }
       },
-      
+
       dist: {
         options: {
           base: '<%= yeoman.dist %>'
@@ -194,7 +208,8 @@ module.exports = function (grunt) {
     bowerInstall: {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
-        ignorePath: '<%= yeoman.app %>/'
+        ignorePath: '<%= yeoman.app %>/',
+        exclude: ['bootstrap-sass-official']
       },
       sass: {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -333,6 +348,10 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
+      defaultLang: {
+        src:  '.tmp/scripts/locales/' + defaultLang + '.js',
+        dest: '.tmp/scripts/locales/default.js'
+      },
       dist: {
         files: [{
           expand: true,
@@ -425,22 +444,25 @@ module.exports = function (grunt) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
     }
-
     grunt.task.run([
-      'jsonAngularTranslate',
-      'lineending',
       'clean:server',
       'bowerInstall',
       'concurrent:server',
       'autoprefixer',
+      'translationSetup',
       'connect:livereload',
       'watch'
     ]);
   });
 
-  grunt.registerTask('test', [
+  grunt.registerTask('translationSetup', [
+    'concat-json',
     'jsonAngularTranslate',
-    'lineending',
+    'copy:defaultLang',
+  ]);
+
+  grunt.registerTask('test', [
+    'translationSetup',
     'clean:server',
     'concurrent:test',
     'autoprefixer',
@@ -449,10 +471,9 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'jsonAngularTranslate',
-    'lineending',
     'clean:dist',
     'bowerInstall',
+    'translationSetup',
     'useminPrepare',
     'concurrent:dist',
     'concat',

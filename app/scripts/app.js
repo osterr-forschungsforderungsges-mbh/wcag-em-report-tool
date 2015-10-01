@@ -6,38 +6,40 @@ angular.module('wcagReporter', [
     'ngRoute',
     'ngAnimate',
     'pascalprecht.translate',
+    '720kb.tooltips',
     'ui.bootstrap',
-    'wert-templates'
+    'wert-templates',
+    'wcag20spec'
 ]).config(function ($routeProvider, $compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|data|blob):/);
 
     $routeProvider.when('/', {
         templateUrl: 'views/start.html',
         controller: 'StartCtrl'
-    }).when('/audit/scope', {
-        templateUrl: 'views/audit/scope.html',
-        controller: 'AuditScopeCtrl'
-    }).when('/audit/explore', {
-        templateUrl: 'views/audit/explore.html',
-        controller: 'AuditExploreCtrl'
-    }).when('/audit/sample', {
-        templateUrl: 'views/audit/sample.html',
-        controller: 'AuditSampleCtrl'
-    }).when('/audit/test', {
-        templateUrl: 'views/audit/test.html',
-        controller: 'AuditTestCtrl'
-    }).when('/audit/finalize', {
-        templateUrl: 'views/audit/finalize.html',
-        controller: 'AuditFinalizeCtrl'
+    }).when('/evaluation/scope', {
+        templateUrl: 'views/evaluation/scope.html',
+        controller: 'EvalScopeCtrl'
+    }).when('/evaluation/explore', {
+        templateUrl: 'views/evaluation/explore.html',
+        controller: 'EvalExploreCtrl'
+    }).when('/evaluation/sample', {
+        templateUrl: 'views/evaluation/sample.html',
+        controller: 'EvalSampleCtrl'
+    }).when('/evaluation/audit', {
+        templateUrl: 'views/evaluation/audit.html',
+        controller: 'EvalAuditCtrl'
+    }).when('/evaluation/report', {
+        templateUrl: 'views/evaluation/report.html',
+        controller: 'EvalReportCtrl'
     }).when('/report', {
         templateUrl: 'views/report.html',
         controller: 'ReportCtrl'
-    }).when('/import', {
-        templateUrl: 'views/import.html',
-        controller: 'ImportCtrl'
-    }).when('/export', {
-        templateUrl: 'views/export.html',
-        controller: 'ExportCtrl'
+    }).when('/open', {
+        templateUrl: 'views/open.html',
+        controller: 'OpenCtrl'
+    }).when('/save', {
+        templateUrl: 'views/save.html',
+        controller: 'SaveCtrl'
     }).otherwise({
         redirectTo: '/'
     });
@@ -65,7 +67,7 @@ $location, $rootElement, evalScopeModel, showSave) {
     view is loaded, we'll wait another half second for it to compile
     and then move focus to the h1.
      */
-    function focusH1() {
+    $rootElement.focusH1 = function focusH1() {
         var h1 = $rootElement.find('h1:first()').attr({
             'tabindex': -1,
             // This is a bug workaround for NVDA + IE, which
@@ -75,7 +77,7 @@ $location, $rootElement, evalScopeModel, showSave) {
         setTimeout(function () {
             h1.focus();
         }, 10);
-    }
+    };
 
     $rootScope.setTitle = function (title) {
         var sitename = '';
@@ -89,7 +91,7 @@ $location, $rootElement, evalScopeModel, showSave) {
         if (moveFocusToH1) {
             moveFocusToH1 = false;
             // Wait for the template to compile, then focus to h1
-            setTimeout(focusH1, 750);
+            setTimeout($rootScope.focusH1, 750);
         }
 
         return title;
@@ -103,7 +105,7 @@ $location, $rootElement, evalScopeModel, showSave) {
 
     $rootScope.setEvalLocation = function () {
         appState.setDirtyState();
-        $location.path('/audit/scope');
+        $location.path('/evaluation/scope');
     };
 
     /*
@@ -138,11 +140,20 @@ $location, $rootElement, evalScopeModel, showSave) {
         });
     }
 
+// Setup the tooltips default
+}).config(function(tooltipsConfigProvider) {
+    tooltipsConfigProvider.options({
+        speed: 'fast',
+        lazy: false,
+        showTrigger: 'mouseover focus',
+        hideTrigger: 'mouseout blur'
+    });
+
 // Setup automatic import/export based on attributes of the root element
 }).run(function (wcagReporterImport, wcagReporterExport, $rootElement) {
-    //var autosave = $rootElement.attr('autosave');
+
     wcagReporterExport.storage.init({
-        //autosave: (autosave === '' || autosave.toLowerCase() === 'autosave'),
+        autosave: (typeof $rootElement.attr('autosave') === 'string'),
         url: $rootElement.attr('url'),
         saveDelay: ($rootElement.attr('save-delay') || 1500)
     });
@@ -151,4 +162,3 @@ $location, $rootElement, evalScopeModel, showSave) {
         wcagReporterImport.getFromUrl();
     }
 });
-
