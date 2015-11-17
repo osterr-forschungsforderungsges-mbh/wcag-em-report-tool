@@ -34,11 +34,31 @@ function ($scope, evalSampleModel, Page, $rootScope) {
 		$scope.auditSize = ($scope.anySelect ? pages.length : 0);
 	};
 
+
+	var previousSelection;
+	$scope.multiSelect = function (index, event) {
+		if (event.toElement.nodeName.toLowerCase() !== 'input') {
+			return;
+		}
+
+		if (typeof previousSelection !== 'undefined' && event.shiftKey) {
+			var pages = evalSampleModel.getFilledPages();
+			var start = Math.min(previousSelection, index);
+			var end   = Math.max(previousSelection, index);
+			var state = pages[index].selected;
+
+			for (var i = start; i <= end; i++) {
+				pages[i].selected = state;
+			}
+			$scope.sampleChange();
+		}
+		previousSelection = index;
+	};
+
     $scope.sampleChange = function () {
     	var selected = getSelected().length;
     	$scope.auditSize = selected;
     	$scope.anySelect = selected > 0;
-    	// console.log('!!This event does\'t get picked up anymore!!');
         $rootScope.$broadcast('audit:sample-change');
     };
 

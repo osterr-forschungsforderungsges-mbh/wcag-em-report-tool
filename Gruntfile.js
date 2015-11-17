@@ -48,9 +48,9 @@ module.exports = function (grunt) {
     'concat-json': (function () {
         return langs.reduce(function (tasks, lang) {
           tasks[lang] = {
-            cwd: 'app/locale/' + lang,
+            cwd: '.tmp/locale/' + lang,
             src: '*.json',
-            dest: '.tmp/locales/' + lang + '.json'
+            dest: '.tmp/locale/' + lang + '.json'
           };
           return tasks;
         }, {});
@@ -63,9 +63,9 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '.tmp/locales',
+          cwd: '.tmp/locale',
           src: '*.json',
-          dest: '.tmp/scripts/locales',
+          dest: '.tmp/scripts/locale',
           ext: '.js'
         }]
       }
@@ -100,8 +100,8 @@ module.exports = function (grunt) {
         tasks: ['compass:server', 'autoprefixer']
       },
       jsonAngularTranslate: {
-        files: ['locales/*.json'],
-        tasks: ['jsonAngularTranslate:createJs']
+        files: ['app/local/**/*.json'],
+        tasks: ['translationSetup']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -112,7 +112,6 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
-          '<%= yeoman.app %>/scripts/locales/*.js',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
@@ -341,16 +340,27 @@ module.exports = function (grunt) {
     // Copies remaining files to places other tasks can use
     copy: {
       defaultLang: {
-        src:  '.tmp/scripts/locales/' + defaultLang + '.js',
-        dest: '.tmp/scripts/locales/default.js'
+        src:  '.tmp/scripts/locale/' + defaultLang + '.js',
+        dest: '.tmp/scripts/locale/default.js'
+      },
+      localeCapitalized: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>/locale/',
+          dest: '.tmp/locale/',
+          src: ['**/*.json'],
+          rename: function(dest, src) {
+            return dest + (src.toUpperCase().substr(0, src.length-4)) + 'json';
+          }
+        }]
       },
       // We'll make the bootstrap fonts directly available
       font: {
           expand: true,
           flatten: true,
-          cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass/assets/fonts/',
+          cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
           dest: '<%= yeoman.app %>/styles/bootstrap',
-          src: ['bootstrap/*.*']
+          src: ['glyphicons-halflings-regular.*']
       },
       dist: {
         files: [{
@@ -363,20 +373,27 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'views/**/*.html',
-            'images/{,*/}*.{webp}',
-            'fonts/*'
+            'images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            'glyphicons-halflings-regular.*'
           ]
-        }, {
-          expand: true,
-          cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/images',
-          src: ['generated/*']
         }, {
           expand: true,
           flatten: true,
           cwd: '<%= yeoman.app %>',
           dest: '<%= yeoman.dist %>/styles/bootstrap',
           src: ['styles/bootstrap/*.*']
+        }, {
+          expand: true,
+          cwd: '.tmp/scripts/locale/',
+          src: '*.js',
+          dest: '<%= yeoman.dist %>/scripts/locale/'
+        }, {
+          expand: true,
+          cwd: '<%= yeoman.app %>/wcag20spec/js/',
+          src: '*.js',
+          dest: '<%= yeoman.dist %>/wcag20spec/js/'
+        }, {
+          // images
         }]
       },
       styles: {
@@ -456,6 +473,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('translationSetup', [
+    'copy:localeCapitalized',
     'concat-json',
     'jsonAngularTranslate',
     'copy:defaultLang',

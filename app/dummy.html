@@ -54,10 +54,12 @@ url="http://wcag-em-reporter-tool.iriscouch.com/reports/1">
   <script src="scripts/jsonld.js"></script>
   <!-- endbuild -->
 
+
   <!-- build:js({.tmp,app}) scripts/scripts.js -->
   <script src="scripts/app.js"></script>
-  <script src="scripts/locales/default.js"></script>
+  <script src="scripts/app.setup.js"></script>
 
+  <script src="scripts/services/localeLoader.js"></script>
   <script src="scripts/services/directivePlugin.js"></script>
   <script src="scripts/services/evalContext.js"></script>
   <script src="scripts/services/knownTechnologies.js"></script>
@@ -96,7 +98,6 @@ url="http://wcag-em-reporter-tool.iriscouch.com/reports/1">
 
   <script src="scripts/models/AppState.js"></script>
   <script src="scripts/models/wcag20spec.js"></script>
-  <script src="wcag20spec/js/wcag20.en.js"></script>
   <script src="scripts/models/class/CriterionAssert.js"></script>
   <script src="scripts/models/class/TestCaseAssert.js"></script>
   <script src="scripts/models/class/Page.js"></script>
@@ -110,6 +111,7 @@ url="http://wcag-em-reporter-tool.iriscouch.com/reports/1">
   <script src="scripts/models/import.js"></script>
   <script src="scripts/models/export.js"></script>
 
+  <script src="scripts/controllers/navigation.js"></script>
   <script src="scripts/controllers/start.js"></script>
   <script src="scripts/controllers/stepButtons.js"></script>
   <script src="scripts/controllers/evaluation/scope.js"></script>
@@ -126,6 +128,10 @@ url="http://wcag-em-reporter-tool.iriscouch.com/reports/1">
   <script src="scripts/controllers/report/findings.js"></script>
   <!-- endbuild -->
 
+  <script src="scripts/locale/EN.js"></script>
+  <script src="scripts/locale/NL.js"></script>
+  <script src="wcag20spec/js/wcag2.en.js"></script>
+  <script src="wcag20spec/js/wcag2.nl.js"></script>
   <script src="scripts/templates.js"></script>
 
 </body>

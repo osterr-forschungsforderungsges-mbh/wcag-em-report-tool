@@ -3,15 +3,11 @@
   value="assert.result" options="opt" class="appear">
 
     <div class="col-xs-12">
-      {{:: 'AUDIT.RESULTS_FOR' | translate}}:
+      {{ 'AUDIT.RESULTS_FOR' | translate}}:
       <em ng-bind="assert.subject[0].displayHandle()"></em>
-      ({{assert.subject[0].description}})
-
-<!--       <button ng-if="opt.editable" ng-click="createMacro(assert)"
-      type="submit" class="glyphicon glyphicon-copy pull-right">
-        <span class="sr-only">{{ 'AUDIT.BTN_RESULT_COPY' | translate }}</span>
-      </button> -->
-
+      <span ng-if="assert.subject[0].description">
+        ({{assert.subject[0].description}})
+      </span>
     </div>
 
   </earl-assert>

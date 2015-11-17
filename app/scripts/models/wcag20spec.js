@@ -3,9 +3,12 @@
  *
  */
 angular.module('wcagReporter')
-.factory('wcag20spec', function(wcag20specEn) {
-    var guidelines, criteria,
-        criteriaObj = {};
+.factory('wcag20spec', function() {
+    var guidelines;
+    var criteria;
+    var currentSpec;
+    var criteriaObj = {};
+    var specs = {};
 
     function pluck(prop) {
         return function (a, b) {
@@ -16,22 +19,38 @@ angular.module('wcagReporter')
         };
     }
 
-    // Concat all guidelines arrays of each principle
-    guidelines = wcag20specEn.principles
-    .reduce(pluck('guidelines'), []);
+    var wcag2 = {
+        addSpec: function (lang, spec) {
+            specs[lang] = spec;
+            if (!currentSpec) {
+                wcag2.useLanguage(lang);
+            }
+        },
 
-    // Concat all criteria arrays of each guideline
-    criteria   = guidelines.reduce(pluck('successcriteria'), []);
+        useLanguage: function (lang) {
+            lang = lang.toLowerCase();
+            if (!specs[lang]) {
+                throw new Error('Spec for lang ' + lang + ' not defined.');
+            }
+            currentSpec = specs[lang];
+            // Concat all guidelines arrays of each principle
+            guidelines = currentSpec.principles
+            .reduce(pluck('guidelines'), []);
 
-    // Make an object of the criteria array with uri as keys
-    criteria.forEach(function (criterion) {
-        var level = 'wcag20:level_' + criterion.level;
-        criterion.id = criterion.id.replace('WCAG2:', 'wcag20:');
-        criterion.level = level.toLowerCase();
-        criteriaObj[criterion.id] = criterion;
-    });
+            // Concat all criteria arrays of each guideline
+            criteria = guidelines.reduce(pluck('successcriteria'), []);
 
-    return {
+            // Make an object of the criteria array with uri as keys
+            criteria.forEach(function (criterion) {
+                if (['A', 'AA', 'AAA'].indexOf(criterion.level) !== -1) {
+                    var level = 'wcag20:level_' + criterion.level;
+                    criterion.id = criterion.id.replace('WCAG2:', 'wcag20:');
+                    criterion.level = level.toLowerCase();
+                    criteriaObj[criterion.id] = criterion;
+                }
+            });
+        },
+
         getGuidelines: function () {
             return guidelines;
         },
@@ -42,7 +61,11 @@ angular.module('wcagReporter')
             return criteriaObj[id];
         },
         getPrinciples: function () {
-            return wcag20specEn.principles;
+            return currentSpec.principles;
         }
     };
+
+
+
+    return wcag2;
 });
