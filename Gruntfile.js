@@ -18,12 +18,10 @@ module.exports = function (grunt) {
   var fs = require('fs');
 
   // load plugins
-  grunt.loadNpmTasks('grunt-json-angular-translate');
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-concat-json');
 
   var langPath    = 'app/locale/';
-  var defaultLang = grunt.option('lang') || 'en';
   var langs = fs.readdirSync(langPath)
   .reduce(function (langs, file) {
     var stat = fs.statSync(langPath + file);
@@ -50,26 +48,11 @@ module.exports = function (grunt) {
           tasks[lang] = {
             cwd: '.tmp/locale/' + lang,
             src: '*.json',
-            dest: '.tmp/locale/' + lang + '.json'
+            dest: '.tmp/locale/' + (lang.toLowerCase()) + '.json'
           };
           return tasks;
         }, {});
     }()),
-
-    jsonAngularTranslate: {
-      createJs: {
-        options: {
-          moduleName: 'wcagReporter',
-        },
-        files: [{
-          expand: true,
-          cwd: '.tmp/locale',
-          src: '*.json',
-          dest: '.tmp/scripts/locale',
-          ext: '.js'
-        }]
-      }
-    },
 
     html2js: {
       options: {
@@ -91,6 +74,10 @@ module.exports = function (grunt) {
         files: ['bower.json'],
         tasks: ['wiredep']
       },
+      tranlsations: {
+        files: ['<%= yeoman.app %>/locale/**/*.json'],
+        tasks: ['translationSetup']
+      },
       jsTest: {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
@@ -98,10 +85,6 @@ module.exports = function (grunt) {
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
-      },
-      jsonAngularTranslate: {
-        files: ['app/local/**/*.json'],
-        tasks: ['translationSetup']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -113,6 +96,7 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
+          '.tmp/locale/*.json',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -339,10 +323,6 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
-      defaultLang: {
-        src:  '.tmp/scripts/locale/' + defaultLang + '.js',
-        dest: '.tmp/scripts/locale/default.js'
-      },
       localeCapitalized: {
         files: [{
           expand: true,
@@ -417,36 +397,6 @@ module.exports = function (grunt) {
       ]
     },
 
-    // By default, your `index.html`'s <!-- Usemin block --> will take care of
-    // minification. These next options are pre-configured if you do not wish
-    // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css',
-    //         '<%= yeoman.app %>/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    uglify: {
-      options: {
-        //sourceMap: true,
-      },
-      // dist: {
-      //   files: {
-      //     '<%= yeoman.dist %>/scripts/scripts.js': ['<%= yeoman.dist %>/scripts/scripts.js'],
-      //     '<%= yeoman.dist %>/scripts/templates.js': ['<%= yeoman.dist %>/scripts/templates.js'],
-      //     '<%= yeoman.dist %>/scripts/vendor.js': ['<%= yeoman.dist %>/scripts/vendor.js']
-      //   }
-      // }
-    },
-    // concat: {
-    //   dist: {}
-    // },
-
-    // Test settings
     karma: {
       unit: {
         configFile: 'karma.conf.js',
@@ -475,13 +425,12 @@ module.exports = function (grunt) {
   grunt.registerTask('translationSetup', [
     'copy:localeCapitalized',
     'concat-json',
-    'jsonAngularTranslate',
-    'copy:defaultLang',
   ]);
 
   grunt.registerTask('test', [
     'translationSetup',
     'clean:server',
+    'translationSetup',
     'concurrent:test',
     'autoprefixer',
     'connect:test',

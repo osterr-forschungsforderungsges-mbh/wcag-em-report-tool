@@ -10,7 +10,8 @@
     {{ 'SAVE.BTN_DOWNLOAD_DATA_FILE' | translate }}
 </a></p>
 
-<p ng-bind-html="'SAVE.TIPS' | translateAndLink
-: ['SAVE.TIPS_0', '#/report'] | nlToBr"></p>
+<p ng-bind-html="'SAVE.TIPS' | translate: {
+  link_report: '#/report'
+}"></p>
 
 <p><a href="javascript:window.history.back()">{{'NAV.BTN_BACK_TO_EVAL' | translate }}</a></p>

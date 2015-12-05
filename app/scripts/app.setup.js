@@ -66,10 +66,16 @@ angular.module('wcagReporter')
 
 
 // Setup root scope
-}).run(function ($rootScope, translateFilter, appState, $location) {
+}).run(function ($rootScope, translateFilter, appState,
+                 $location, $rootElement) {
 
     $rootScope.translate = translateFilter;
     $rootScope.rootHide = {};
+
+    $rootScope.$on('$translateChangeSuccess', function (e, change) {
+        $rootElement.attr('lang', change.language);
+        $rootScope.lang = change.language;
+    });
 
     appState.init();
 
@@ -97,6 +103,16 @@ angular.module('wcagReporter')
             }
         });
     }
+
+    // Ensure all external links open in a new window
+    var reg = new RegExp('/' + window.location.host + '/');
+    $rootElement.on('click', 'a[href]:not(.local)', function (e) {
+        if (!reg.test(this.href)) {
+           e.preventDefault();
+           e.stopPropagation();
+           window.open(this.href, '_blank');
+        }
+    });
 
 
 // Setup automatic import/export based on attributes of the root element
