@@ -3,7 +3,7 @@
 describe('Service: evalContext', function () {
 
     // load the service's module
-    beforeEach(module('wcagReporter'));
+    setupwcagReporterTest();
 
     // instantiate service
     var evalContext;
