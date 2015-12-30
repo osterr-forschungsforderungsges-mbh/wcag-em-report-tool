@@ -5,7 +5,7 @@
  *
  */
 angular.module('wcagReporter')
-.provider('wcag20spec', function() {
+.provider('wcag2spec', function() {
     var specPath;
     var guidelines;
     var criteria;
@@ -47,7 +47,7 @@ angular.module('wcagReporter')
             .done(function (data) {
                 specs[lang] = data;
                 wcag2.useLanguage(lang);
-                broadcast('wcag20spec:load', lang);
+                broadcast('wcag2spec:load', lang);
             }).fail(console.error.bind(console));
         },
 
@@ -67,14 +67,12 @@ angular.module('wcagReporter')
             // Make an object of the criteria array with uri as keys
             criteria.forEach(function (criterion) {
                 if (['A', 'AA', 'AAA'].indexOf(criterion.level) !== -1) {
-                    var level = 'wcag20:level_' + criterion.level;
-                    criterion.id = criterion.id.replace('WCAG2:', 'wcag20:');
-                    criterion.level = level.toLowerCase();
+                    criterion.level = 'wai:WCAG2' + criterion.level + '-Conformance';
                     criteriaObj[criterion.id] = criterion;
                 }
             });
             
-            broadcast('wcag20spec:langChange', lang);
+            broadcast('wcag2spec:langChange', lang);
         },
 
         getGuidelines: function () {

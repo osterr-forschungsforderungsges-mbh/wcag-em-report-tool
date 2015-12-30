@@ -1,15 +1,17 @@
 'use strict';
 /**
- * 
+ *
  */
 angular.module('wcagReporter')
-.factory('wcagReporterExport', function(evalModel, reportStorage) {
+.factory('wcagReporterExport', function(evalModel, reportStorage, pkgData, $rootScope) {
 
 	function getJsonLd () {
 		var jsonLd = {
 			'@context': evalModel.context,
-			type: 'evaluation',
-			'id': evalModel.id
+			type: evalModel.type,
+			'id': evalModel.id,
+			'publisher': 'reporter:releases/tag/' + pkgData.version,
+			'lang': $rootScope.lang
 		};
 
 		jsonLd.evaluationScope =  evalModel.scopeModel.exportData();
@@ -66,7 +68,7 @@ angular.module('wcagReporter')
 		},
 
 		getFileName: function (ext) {
-			var title = (evalModel.scopeModel.website.title +
+			var title = (evalModel.scopeModel.website.siteName +
 			' evaluation report');
 			ext = ext || 'json';
 			title = title.trim();

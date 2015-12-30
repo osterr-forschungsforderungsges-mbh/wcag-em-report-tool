@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('wcagReporter')
-.service('CriterionAssert', function(evalSampleModel,
-TestCaseAssert, wcag20spec, currentUser) {
+.service('CriterionAssert', function(evalSampleModel, $filter,
+TestCaseAssert, wcag2spec, currentUser) {
 
 	function CriterionAssert(idref) {
         var self = this;
@@ -14,7 +14,7 @@ TestCaseAssert, wcag20spec, currentUser) {
             }
         }
 
-        this.testRequirement = idref;
+        this.test = idref;
         this.hasPart = [];
         this.result = {
             outcome: 'earl:untested',
@@ -54,17 +54,16 @@ TestCaseAssert, wcag20spec, currentUser) {
                     }
                 }
             });
-            // console.log(x, parts.length, page.id);
         };
     }
 
     CriterionAssert.prototype = {
-        type: 'earl:assertion',
-        testRequirement: undefined,
-        assertedBy: currentUser.id,
+        type: 'Assertion',
+        test: undefined,
+        assertedBy: undefined,
         subject: '_:website',
         result: undefined,
-        mode: 'manual',
+        mode: undefined,
         hasPart: undefined,
         getSinglePageAsserts: undefined,
         getMultiPageAsserts: undefined,
@@ -72,7 +71,7 @@ TestCaseAssert, wcag20spec, currentUser) {
         addTestCaseAssertion: function (obj) {
             var key,
                 tc = new TestCaseAssert();
-            tc.testcase = this.testRequirement;
+            tc.testcase = this.test;
             this.hasPart.push(tc);
             if (!obj) {
                 return;
@@ -138,7 +137,7 @@ TestCaseAssert, wcag20spec, currentUser) {
         },
 
         getSpec: function () {
-            return wcag20spec.getCriterion(this.testRequirement);
+            return wcag2spec.getCriterion(this.test);
         }
     };
 
@@ -156,6 +155,12 @@ TestCaseAssert, wcag20spec, currentUser) {
         return hasPart || !!critAssert.result.description ||
                critAssert.result.outcome !== 'earl:untested';
     };
+
+    CriterionAssert.updateMetadata = function (critAssert) {
+        critAssert.assertedBy = currentUser.id;
+        critAssert.mode = 'earl:manual';
+        critAssert.result.date = $filter('date')(Date.now(), 'yyyy-MM-dd HH:mm:ss Z');
+    }
 
     return CriterionAssert;
 });

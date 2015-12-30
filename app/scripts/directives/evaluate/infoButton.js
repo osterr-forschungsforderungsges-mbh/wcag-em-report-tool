@@ -9,6 +9,7 @@ angular.module('wcagReporter')
         },
         link: function (scope, elm) {
             var tgt;
+
             elm.on('click', function () {
                 if (!tgt) {
                     if (typeof scope.target === 'undefined') {
@@ -16,15 +17,16 @@ angular.module('wcagReporter')
                     } else {
                         tgt = angular.element('#' + scope.target);
                     }
+                    tgt.find('.close').on('click',
+                            elm.attr.bind(elm, 'aria-expanded', false));
                 }
                 tgt.toggle(200, function () {
                     tgt.focus();
+                    elm.attr('aria-expanded', tgt.is(':visible'));
                 });
             });
         },
         replace: true,
-        template: '<a class="info-icon" href="">' +
-            '<span class="glyphicon glyphicon-info-sign"></span>' +
-            '<span class="sr-only">{{label}}</span></a> '
+        templateUrl: 'views/directives/evaluate/infoButton.html'
     });
 });

@@ -15,6 +15,7 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  var pkg = require('./package.json');
   var fs = require('fs');
 
   var langPath    = 'app/locale/';
@@ -190,7 +191,8 @@ module.exports = function (grunt) {
         exclude: [
           'bootstrap-sass-official',
           'angular-scenario',
-          'angular-mocks'
+          'angular-mocks',
+          'axe-core'
         ]
       },
       sass: {
@@ -351,7 +353,7 @@ module.exports = function (grunt) {
             'views/**/*.html',
             'images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
             'glyphicons-halflings-regular.*',
-            'wcag20spec/*.json'
+            'wcag2spec/*.json'
           ]
         }, {
           expand: true,
@@ -366,11 +368,6 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>/scripts/locale/'
         }, {
           expand: true,
-          cwd: '<%= yeoman.app %>/wcag20spec/js/',
-          src: '*.js',
-          dest: '<%= yeoman.dist %>/wcag20spec/js/'
-        }, {
-          expand: true,
           cwd: '.tmp/locale/',
           src: '*.json',
           dest: '<%= yeoman.dist %>/locale/'
@@ -381,6 +378,26 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      }
+    },
+
+    replace: {
+      'pkgData': {
+        options: {
+          patterns: [{
+            match: /<%= pkg\.name =%>/g,
+            replacement: pkg.name
+          }, {
+            match: /<%= pkg\.version =%>/g,
+            replacement: pkg.version
+          }]
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.dist %>/scripts',
+          src: '*.js',
+          dest: '<%= yeoman.dist %>/scripts'
+        }]
       }
     },
 
@@ -447,6 +464,7 @@ module.exports = function (grunt) {
     'uglify',
     'rev',
     'usemin',
+    'replace:pkgData',
     'clean:distView',
     'htmlmin:dist'
   ]);

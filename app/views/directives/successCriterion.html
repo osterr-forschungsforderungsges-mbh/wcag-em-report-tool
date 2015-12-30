@@ -1,17 +1,19 @@
 <div class="panel criterion panel-default"
 ng-class="getClassName(assert.result.outcome)">
 
-  <earl-assert class="panel-heading" value="assert.result" options="opt">
+  <earl-assert class="panel-heading" assert="assert" options="opt">
 
     <div class="col-xs-12 criterion-title">
       <strong>{{ spec.num}} {{ spec.handle}}</strong>: ({{spec.level | rdfToLabel}})
-      <button ng-click="spec.show_text = !spec.show_text"
-        class="btn btn-default glyphicon glyphicon-education pull-right"
-        tooltips tooltip-title="{{'AUDIT.BTN_SHOW_TEXT' | translate}}">
-          <span class="sr-only">{{'AUDIT.BTN_SHOW_TEXT' | translate}}</span>
-      </button>
-    </div>
-    <div class="col-xs-12" collapse="!spec.show_text">
+      <span class="pull-right">
+        <button onclick="toggleCriterionText(this)"
+        class="btn btn-default glyphicon glyphicon-education"
+        aria-expanded="false">
+            <span class="hint">{{'AUDIT.BTN_SHOW_TEXT' | translate}}</span>
+        </button>
+      </span>
+    
+    </div><div class="col-xs-12 crit-text collapsed">
       <p>{{spec.text}}<p>
       <div ng-repeat="detail in spec.details">
         <ul ng-if="detail.type === 'ulist'">
@@ -53,6 +55,7 @@ ng-class="getClassName(assert.result.outcome)">
 
   <div class="crit-detail-btn" ng-if="opt.collapses">
     <button class="btn btn-default"
+    aria-expanded="{{!!rootHide[critHide]}}"
     ng-click="rootHide[critHide] = !rootHide[critHide]">
 
       <span ng-if="!rootHide[critHide]" class="glyphicon glyphicon-chevron-right"></span>

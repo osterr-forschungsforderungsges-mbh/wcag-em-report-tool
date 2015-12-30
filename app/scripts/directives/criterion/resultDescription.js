@@ -7,7 +7,7 @@ angular.module('wcagReporter')
         replace: true,
         scope: {
             value: '=',
-            id: '@'
+            updateMetadata: '='
         },
         templateUrl: 'views/directives/criterion/resultDescription.html'
 	});

@@ -3,22 +3,26 @@
 angular.module('wcagReporter')
 .service('evalScopeModel', function() {
     var scopeModel = {
-    	conformanceTarget: 'wcag20:level_aa',
+        type: 'EvaluationScope',
+    	conformanceTarget: 'wai:WCAG2AA-Conformance',
         additionalEvalRequirement: '',
         website: {
+            type: ['TestSubject', 'WebSite'],
             'id': '_:website',
-            title: '',
+            siteName: '',
             siteScope: '' },
         accessibilitySupportBaseline: ''
     };
 
     scopeModel.exportData = function () {
         return {
+            type: scopeModel.type,
             conformanceTarget: scopeModel.conformanceTarget,
             additionalEvalRequirement: scopeModel.additionalEvalRequirement,
             website: {
+                type:      scopeModel.website.type,
                 id:        scopeModel.website.id,
-                title:     scopeModel.website.title,
+                siteName:  scopeModel.website.siteName,
                 siteScope: scopeModel.website.siteScope
             },
             accessibilitySupportBaseline: scopeModel.accessibilitySupportBaseline
@@ -26,7 +30,9 @@ angular.module('wcagReporter')
     };
 
     scopeModel.conformanceOptions = [
-        'wcag20:level_a', 'wcag20:level_aa', 'wcag20:level_aaa'
+        'wai:WCAG2A-Conformance',
+        'wai:WCAG2AA-Conformance',
+        'wai:WCAG2AAA-Conformance'
     ];
 
     /**

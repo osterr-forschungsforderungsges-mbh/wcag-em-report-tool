@@ -13,7 +13,7 @@
     "LABEL_PAGE": "Address (URL) or description",
     "NO_PAGES_DEFINED": "No pages defined for this list",
     "ITEM": "Web page",
-    "PLH_HANDLE": "Identifier for the web page",
+    "PLH_TITLE": "Identifier for the web page",
     "PLH_PAGE_URL": "Address (URL) or description of how to get there",
     "BTN_ADD_PAGE": "Add web page",
     "BTN_REMOVE_PAGE": "Remove page",

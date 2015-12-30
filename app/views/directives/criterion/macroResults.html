@@ -1,6 +1,6 @@
 <div>
   <earl-assert ng-repeat="assert in asserts"
-  value="assert.result" options="opt" class="appear">
+  assert="assert" options="opt" class="appear">
 
     <div class="col-sm-4 col-md-3 subject-type">{{ 'AUDIT.RESULTS_FOR' | translate }}:</div>
 
@@ -43,7 +43,7 @@
     </div>
 
     <div class="col-sm-8 col-md-9" ng-if="!opt.editable">
-      <em ng-bind="getAllHandles(assert)"></em>
+      <em ng-bind="getAllTitles(assert)"></em>
     </div>
 
   </earl-assert>

@@ -24,15 +24,16 @@ module.exports = function(config) {
       'app/bower_components/angular-animate/angular-animate.js',
       'app/bower_components/textarea-autosize/dist/jquery.textarea_autosize.js',
       'app/bower_components/angular-tooltips/dist/angular-tooltips.min.js',
-      'app/scripts/promise-1.0.0.js',
-      'app/scripts/jsonld.js',
+      'app/scripts/libs/promise-1.0.0.js',
+      'app/scripts/libs/jsonld.js',
       'app/scripts/**/{,*/}*.js',
-      'app/scripts/app.setup.js',
+      'app/scripts/app.language.js',
+      'app/scripts/app.run.js',
       'app/scripts/app.js',
       {pattern: '.tmp/locale/*.json', included: false, served: true},
-      {pattern: 'app/wcag20spec/*.json', included: false, served: true},
+      {pattern: 'app/wcag2spec/*.json', included: false, served: true},
       'test/setup.js',
-      'test/dummyData.js',
+      'test/dummyData/*.js',
       'test/spec/**/{,*/}*.js'
     ],
 
@@ -41,7 +42,7 @@ module.exports = function(config) {
 
 
     proxies: {
-      "/wcag20spec/": "http://localhost:8080/base/app/wcag20spec/",
+      "/wcag2spec/": "http://localhost:8080/base/app/wcag2spec/",
       "/locale/": "http://localhost:8080/base/.tmp/locale/"
     },
 

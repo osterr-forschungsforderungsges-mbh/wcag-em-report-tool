@@ -1,18 +1,22 @@
 'use strict';
 
 angular.module('wcagReporter')
-.service('Page', function (translateFilter) {
-
+.service('Page', function ($filter) {
+    var translateFilter = $filter('translate');
+    
 	function Page() {
+        this.type = ['TestSubject', 'WebPage'];
 	}
 
-	Page.getUrl = function (page) {
-        var linkReg = /((https?):\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\-\w\d@:%_\+.~#?,&\/\/=]+)/g,
-            match = page.description.match(linkReg);
-        if (match) {
-            return match[0];
+    Page.updateSource = function (page) {
+        var source = $filter('getUrl')(page.description);
+        if (source) {
+            page.source = source;
+        } else {
+            delete page.source;
         }
-    };
+        return source;
+    }
 
     Page.prependProtocol = function (page) {
         if (page.description && page.description.match(/^([\da-z\.-]+)\.([a-z\.]{2,6})/)) {
@@ -22,23 +26,22 @@ angular.module('wcagReporter')
 
     Page.openInWindow = function (page, target) {
         target = target || '_blank';
-        var url = Page.getUrl(page);
-        if (url) {
-            window.open(url, target);
+        if (page.source) {
+            window.open(page.source, target);
         }
     };
 
     Page.prototype = {
-        'type': 'webpage',
+        'type': ['TestSubject', 'WebPage'],
         'id': '',
         description: undefined,
-        handle: '',
+        title: '',
         tested: false,
         selected: false,
-        displayHandle: function () {
+        displayTitle: function () {
             var num = 0;
-            if (this.handle.trim()) {
-                return this.handle;
+            if (this.title.trim()) {
+                return this.title;
             } else if (this.id.substr(0, 9) === '_:struct_') {
                 num = +this.id.substr(9);
                 return translateFilter('SAMPLE.STRUCTURED_PAGE') + ' ' + (num + 1);

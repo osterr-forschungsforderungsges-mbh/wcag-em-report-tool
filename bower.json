@@ -11,7 +11,6 @@
     "angular-resource": "~1.4.7",
     "angular-route": "~1.4.7",
     "angular-sanitize": "~1.4.7",
-    "angular-tooltips": "~0.1.22",
     "angular-translate": "~2.8.1",
     "bootstrap-sass-official": "~3.3.5",
     "es5-shim": "~4.1.14",
@@ -23,7 +22,8 @@
   },
   "devDependencies": {
     "angular-mocks": "~1.4.7",
-    "angular-scenario": "~1.4.7"
+    "angular-scenario": "~1.4.7",
+    "axe-core": "~1.1.1"
   },
   "resolutions": {
     "angular": "~1.4.7",

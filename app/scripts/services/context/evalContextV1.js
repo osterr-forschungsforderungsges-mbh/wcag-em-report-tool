@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('wcagReporter')
-.value('evalContext', {
+.value('evalContextV1', {
     '@vocab': 'http://www.w3.org/TR/WCAG-EM/#',
     'wcag20': 'http://www.w3.org/TR/WCAG20/#',
     'earl': 'http://www.w3.org/ns/earl#',
@@ -31,7 +31,7 @@ angular.module('wcagReporter')
     'id': '@id',
     'type': '@type',
     'title': 'dct:title',
-    'hasPart': 'dct:hasPart',   
+    'hasPart': 'dct:hasPart',
     'specs': '@id',
     'reliedUponTechnology': 'wcag20:reliedupondef'
 });

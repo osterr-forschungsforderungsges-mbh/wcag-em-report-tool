@@ -7,13 +7,13 @@ describe('Service: evalContext', function () {
 
     // instantiate service
     var evalContext;
-    beforeEach(inject(function (_evalContext_) {
-        evalContext = _evalContext_;
+    beforeEach(inject(function (evalContextV2) {
+        evalContext = evalContextV2;
     }));
 
     beforeEach(function (done) {
         inject(function ($rootScope) {
-            $rootScope.$on('wcag20spec:langChange', done);
+            $rootScope.$on('wcag2spec:langChange', done);
         });
     });
 

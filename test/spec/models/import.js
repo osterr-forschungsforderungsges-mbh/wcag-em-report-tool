@@ -7,7 +7,7 @@ describe('model: evalModel import', function () {
 
     function getEval(linkedData) {
         return linkedData['@graph'].filter(function (obj) {
-            return obj.type === 'evaluation';
+            return obj.type === 'Evaluation';
         })[0];
     }
 
@@ -17,16 +17,16 @@ describe('model: evalModel import', function () {
     var importEval;
 
     beforeEach(inject(function (wcagReporterImport,
-    wcagReporterExport, basicEvalOutput, _evalModel_) {
+    wcagReporterExport, basicEvalOutput2, _evalModel_) {
         reportImport = wcagReporterImport;
-        dummyData    = basicEvalOutput;
+        dummyData    = basicEvalOutput2;
         evalModel    = _evalModel_;
         importEval   = getEval(dummyData);
     }));
 
     beforeEach(function (done) {
         inject(function ($rootScope) {
-            $rootScope.$on('wcag20spec:langChange', done);
+            $rootScope.$on('wcag2spec:langChange', done);
         });
     });
 
@@ -38,7 +38,7 @@ describe('model: evalModel import', function () {
     it('shares the evaluation ID', function () {
     	expect(evalModel.id)
     	.toBe(importEval.id);
-    })
+    });
 
 
     it('stores scope properties on evalModel.scopeModel', function () {
@@ -52,7 +52,6 @@ describe('model: evalModel import', function () {
 	    	.toEqual(importEval.evaluationScope[prop]);
     	});
     });
-    
 
     it('stores explore properties on evalModel.exploreModel', function () {
     	var exploreModel = evalModel.exploreModel;
@@ -66,7 +65,7 @@ describe('model: evalModel import', function () {
 	    	.toEqual(importEval[prop]);
     	});
     });
-    
+
 
     it('stores sample properties on evalModel.sampleModel', function () {
     	var sampleModel = evalModel.sampleModel;
@@ -84,7 +83,7 @@ describe('model: evalModel import', function () {
     			["type", "id", "description", "handle", "tested"]
     			.forEach(function (prop) {
     				expect(modelPage[prop])
-    				.toBe(importPage[prop]);
+    				.toEqual(importPage[prop]);
     			});
     		});
        	});
@@ -94,13 +93,13 @@ describe('model: evalModel import', function () {
     it('stores audit properties on evalModel.auditModel', function () {
     	var auditModel = evalModel.auditModel;
 
-        importEval.auditResult        
+        importEval.auditResult
         .forEach(function (assert) {
             var critAssert = auditModel
-            .criteria[assert.testRequirement];
+            .criteria[assert.test];
 
             ['type', 'assertedBy', 'mode', 'subject',
-             'result', 'testRequirement']
+             'result', 'test']
             .forEach(function (prop) {
                 expect(critAssert[prop])
                 .toEqual(assert[prop]);
@@ -112,7 +111,7 @@ describe('model: evalModel import', function () {
 
     it('stores report properties on evalModel.reportModel', function () {
         var reportModel = evalModel.reportModel;
-    	
+
         ['title', 'summary', 'specifics',
          'commissioner']
     	.forEach(function (prop) {

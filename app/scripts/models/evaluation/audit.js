@@ -2,7 +2,7 @@
 
 angular.module('wcagReporter')
 .service('evalAuditModel', function(TestCaseAssert,
-evalScopeModel, wcag20spec, CriterionAssert) {
+evalScopeModel, wcag2spec, CriterionAssert) {
 
     var auditModel,
         criteria = {};
@@ -12,8 +12,7 @@ evalScopeModel, wcag20spec, CriterionAssert) {
 
         exportData: function () {
             // Deep copy:
-            var criteria = angular.copy(this.getCriteriaSorted());
-
+            var criteria = angular.copy(auditModel.getCriteriaSorted());
             criteria.reduce(function (list, criterion) {
                 // Remove all empty test case asserts
                 criterion.hasPart = criterion.hasPart
@@ -39,6 +38,7 @@ evalScopeModel, wcag20spec, CriterionAssert) {
                     return page.id;
                 });
             });
+
             return criteria;
         },
 
@@ -47,6 +47,9 @@ evalScopeModel, wcag20spec, CriterionAssert) {
                 if (!angular.isArray(evalData.auditResult)) {
                     evalData.auditResult = [evalData.auditResult];
                 }
+                criteria = {};
+                auditModel.criteria = criteria;
+
                 evalData.auditResult.forEach(auditModel.addCritAssert);
             }
         },
@@ -59,15 +62,15 @@ evalScopeModel, wcag20spec, CriterionAssert) {
         },
 
         getCriteriaSorted: function () {
-            return wcag20spec.getCriteria()
-            .map(function (criterion) {
+            var critSpec = wcag2spec.getCriteria();
+            return critSpec.map(function (criterion) {
                     return criteria[criterion.id];
             }).filter(angular.isDefined);
         },
 
         addCritAssert: function (result) {
-            var prop,
-                newCrit = Object.create(CriterionAssert.prototype);
+            var prop;
+            var newCrit = Object.create(CriterionAssert.prototype);
             CriterionAssert.apply(newCrit);
 
             for (prop in result) {
@@ -82,7 +85,7 @@ evalScopeModel, wcag20spec, CriterionAssert) {
                     newCrit[prop] = result[prop];
                 }
             }
-            criteria[newCrit.testRequirement] = newCrit;
+            criteria[newCrit.test] = newCrit;
         },
 
         addPageForAsserts: function (page) {
@@ -98,11 +101,11 @@ evalScopeModel, wcag20spec, CriterionAssert) {
         },
 
         updateToConformance: function () {
-            wcag20spec.getCriteria()
+            wcag2spec.getCriteria()
             .forEach(function (spec) {
                 if (typeof criteria[spec.id] === 'undefined') {
                     auditModel.addCritAssert({
-                        'testRequirement': spec.id
+                        'test': spec.id
                     });
                 }
             });

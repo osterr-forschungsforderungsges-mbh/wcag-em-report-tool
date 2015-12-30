@@ -13,6 +13,12 @@ table {
     }
 }
 
+
+h3 + .collapsing {
+    /* Minor fix to stop animation from jumping due to .collapsed */
+    margin-top: -($line-height-computed / 3);
+}
+
 *[tabindex="-1"]:focus {
     outline:0 none;
 }
@@ -81,6 +87,13 @@ table {
         border-color:#1e5b8e;
         color:#1e5b8e;
     }
+}
+
+.test_count {
+    margin-top:4px;
+    font-size: $font-size-small;
+    color: $text-color;
+    font-style: normal;
 }
 
 .confirm-transfer,
@@ -278,6 +291,10 @@ a.info-icon {
 .sample-tools {
     margin-left:5px;
     margin-bottom:2px;
+    input[type=checkbox] {
+        margin-top:9px;
+        margin-right:4px;
+    }
 }
 
 #file_label:after {

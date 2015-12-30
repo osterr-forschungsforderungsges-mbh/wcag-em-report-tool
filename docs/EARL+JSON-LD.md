@@ -65,14 +65,17 @@ An evaluation is the process of testing the accessibility of a website
 according to WCAG-EM. Objects of type Evaluation contains the
 data generated as part of the evaluation.
 
+Special: The @language property of JSON-LD will be used by the Report
+Tool to identify the language used in the evaluation.
+
 ### Evaluation properties
 Property            | Type               | Description
 --------------------|--------------------|----------------------------------
 dct:title           | text               | Title of the evaluation report
 dct:summary         | text               | Executive summary
-dct:creator         | text               | Author and creator of the evaluation
+dct:creator         | earl:Assertor      | Author and creator of the evaluation
 dct:date            | text               | Completion date of the evaluation
-commissioner        | text               | Person/organisation who commissioned the evaluation
+commissioner        | text               | Person/organization who commissioned the evaluation
 WCAG2:reliedupondef | WCAG2:technologydef| Web technologies the website relies upon for providing it's content
 step1               | EvaluationScope    | Scope of the evaluation
 step2a              | text               | Common pages of the website
@@ -88,6 +91,7 @@ step5b              | text               | Evaluation specifics
 ```javascript
     {
         "@type":        "Evaluation",
+        "@language":    "en",
         "dct:title":    "Evaluation of example.org",
         "dct:summary":  "This website is very accessible.",
         "dct:creator":  "John Doe",
@@ -150,7 +154,7 @@ sch:name            | text    | The name of the item
 ### Example
 ```javascript
     {
-        "@type": "sch:WebSite",
+        "@type": ['earl:TestSubject', "sch:WebSite"],
         "step1a": "All pages located at www.example.com",
         "sch:name": "Example.com corporate"
     }
@@ -176,11 +180,7 @@ WCAG2:webpagedef    | sch:WebPage | Resourced to be rendered in a user agent
 ```
 
 ## sch:WebPage
-A web page. Every web page is implicitly assumed to be declared to 
-be of type WebPage, so the various properties about that webpage, 
-such as breadcrumb may be used. We recommend explicit declaration if
-these properties are specified, but if they are found outside of an 
-itemscope, they will be assumed to be about the page.
+A web page is an document or application made available over http or https.
 
 ### sch:WebPage properties
 Properties          | Type    | Description
@@ -189,14 +189,16 @@ Properties          | Type    | Description
 dct:title           | text    | Title for the webpabe
 dct:description     | text    | Description of how to show the page
 dct:source          | URL     | Source (url) of the web page
+reporter:tested     | boolean | If the page is fully tested yet
 
 ### Example
 ```javascript
 {
-    "@type": "sch:WebPage",
+    "@type": ['earl:TestSubject', "sch:WebPage"],
     "dct:title": "Example Home",
     "dct:description": "http://example.com/ (mobile version)",
-    "dct:source": "http://example.com/"
+    "dct:source": "http://example.com/",
+    "reporter:tested": false,
 }
 ```
 
@@ -219,13 +221,22 @@ dct:title     | text    | Title by which the technology is known
     }
 ```
 
+## earl:Assertor
+An assertor is an entity such as a person, a software tool, an organization,
+or any other grouping that carries out a test collectively.
+For more details see: http://www.w3.org/TR/EARL10-Schema/#Assertor
+
+The WCAG-EM Report Tool fills in the `foaf:name` property of whichever
+type was used. When creating an evaluation, the 'foaf:Person' class is used.
+
+
 ## earl:Assertion
-Assertions are decribed according to EARL and will also include a TestResult.
+Assertions are described according to EARL and will also include a TestResult.
 For more details see: http://www.w3.org/TR/EARL10-Schema/#Assertion
 
 Important note: To refer to WCAG 2 success criteria, the IDs of given to their
 definition in the official WCAG 2 specification are used. For example, the 
-definition of Success criteiron 1.1.1 is http://www.w3.org/TR/WCAG20/#text-equiv-all
+definition of Success Criterion 1.1.1 is http://www.w3.org/TR/WCAG20/#text-equiv-all
 
 ### hasPart & earl:subject
 
@@ -259,3 +270,7 @@ in a future version of the WCAG-EM Report Tool.
         ]
     }
 ```
+
+## Tested
+
+This boolean value is used by the Report Tool to track if a WebPage is tested.

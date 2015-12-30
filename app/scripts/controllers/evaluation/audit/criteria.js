@@ -2,17 +2,41 @@
 
 angular.module('wcagReporter')
 .controller('AuditCriteriaCtrl', function ($scope, evalAuditModel, evalScopeModel,
-wcag20spec, $rootElement, $anchorScroll, $filter, $rootScope) {
+wcag2spec, $rootElement, $anchorScroll, $filter, $rootScope, $timeout) {
+    var principlesOrigin;
 
     evalAuditModel.updateToConformance();
 
     $scope.criteria = evalAuditModel.getCriteriaSorted();
 
-    $scope.principles = wcag20spec.getPrinciples();
     $scope.getCritAssert = evalAuditModel.getCritAssert;
 
-    $scope.$on('wcag20spec:langChange', function () {
-        $scope.principles = wcag20spec.getPrinciples();
+    function buildPrinciples(target, origin) {
+        var tgtPrinciple  = origin[target.length];
+        target.push(tgtPrinciple);
+
+        // tgtPrinciple.guidelines.forEach(function (g) {
+        //     g.hideCriteria = true;
+        // });
+
+        if (target.length !== origin.length) {
+            $timeout(function () {
+                buildPrinciples(target, origin);
+            }, 50);
+        }
+    }
+
+    principlesOrigin = wcag2spec.getPrinciples();
+    $scope.principles = [];
+    buildPrinciples($scope.principles, principlesOrigin);
+    $scope.principles[0].guidelines[0].hideCriteria = false;
+
+
+    $scope.$on('wcag2spec:langChange', function () {
+        principlesOrigin = wcag2spec.getPrinciples();
+        $scope.principles = [];
+        buildPrinciples($scope.principles, principlesOrigin);
+        $scope.principles[0].guidelines[0].hideCriteria = false;
     });
 
 
@@ -21,27 +45,16 @@ wcag20spec, $rootElement, $anchorScroll, $filter, $rootScope) {
 
     } else {
     	$scope.critFilter = {
-	    	level: {},
-	    	outcome: {}
+            'wai:WCAG2A-Conformance': evalScopeModel.matchConformTarget('wai:WCAG2A-Conformance'),
+            'wai:WCAG2AA-Conformance': evalScopeModel.matchConformTarget('wai:WCAG2AA-Conformance'),
+            'wai:WCAG2AAA-Conformance': evalScopeModel.matchConformTarget('wai:WCAG2AAA-Conformance'),
 		};
-	    // Create filters based known RDF values
-	    Object.keys($filter('rdfToLabel').keymap)
-	    .forEach(function (key) {
-	    	// WCAG 2 stuff is all about levels
-	    	if (key.substr(0, 7) === 'wcag20:') {
-	    		$scope.critFilter.level[key] = evalScopeModel.matchConformTarget(key);
-
-			// EARL stuff is about outcomes
-	    	} else if (key.substr(0, 5) === 'earl:') {
-	    		$scope.critFilter.outcome[key] = true;
-	    	}
-	    });
     	$rootScope.rootHide.criteria = $scope.critFilter;
     }
 
     $scope.isCriterionVisible = function (critSpec) {
 		// Check if the level of this criterion should be shown
-    	if ($scope.critFilter.level[critSpec.level] !== true) {
+    	if ($scope.critFilter[critSpec.level] !== true) {
     		return false;
     	}
 
@@ -53,7 +66,7 @@ wcag20spec, $rootElement, $anchorScroll, $filter, $rootScope) {
         }
 
 		// Check if the outcome is set to hidden
-    	return ($scope.critFilter.outcome[critAssert.result.outcome] === true);
+    	return true;
     };
 
     $scope.isGuidelineVisible = function (guideline) {
@@ -77,6 +90,19 @@ wcag20spec, $rootElement, $anchorScroll, $filter, $rootScope) {
         });
     	return visible;
     };
+
+    var untested = ['earl:untested', 'earl:cantTell'];
+    $scope.criteriaUntested = function (guideline) {
+        var count = 0;
+        guideline.successcriteria.forEach(function (critSpec) {
+            var critAssert = evalAuditModel.getCritAssert(critSpec.id);
+            if (untested.indexOf(critAssert.result.outcome) !== -1) {
+                count += 1;
+            }
+        });
+        return count;
+    }
+
 
     // Scroll to the top, then move focus to the h1
     $scope.toTop = function () {

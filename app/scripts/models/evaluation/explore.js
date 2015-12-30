@@ -2,7 +2,6 @@
 
 angular.module('wcagReporter')
 .service('evalExploreModel', function(knownTech, evalSampleModel) {
-
     var exploreModel = {
         commonPages: [],
         otherRelevantPages: [],

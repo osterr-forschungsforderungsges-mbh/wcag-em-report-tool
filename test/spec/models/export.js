@@ -7,7 +7,7 @@ describe('model: evalModel export', function () {
 
     function getEval(linkedData) {
         return linkedData['@graph'].filter(function (obj) {
-            return obj.type === 'evaluation';
+            return obj.type === 'Evaluation';
         })[0];
     }
 
@@ -17,17 +17,21 @@ describe('model: evalModel export', function () {
     var exportData;
     var importEval;
     var exportEval;
+    var context;
+    var $rootScope;
 
     beforeEach(inject(function (wcagReporterImport,
-    wcagReporterExport, basicEvalOutput) {
+    wcagReporterExport, basicEvalOutput2, evalContextV2) {
         reportImport = wcagReporterImport;
         reportExport = wcagReporterExport;
-        dummyData    = basicEvalOutput;
+        dummyData    = basicEvalOutput2;
+        context      = evalContextV2;
     }));
 
     beforeEach(function (done) {
-        inject(function ($rootScope) {
-            $rootScope.$on('wcag20spec:langChange', done);
+        inject(function (_$rootScope_) {
+            $rootScope = _$rootScope_;
+            $rootScope.$on('wcag2spec:langChange', done);
         });
     });
 
@@ -42,7 +46,7 @@ describe('model: evalModel export', function () {
     });
 
     it('shares properties with imported data', function () {
-        ['evaluationScope', '@context', 'type',
+        ['evaluationScope', 'type',
          'id', 'title', 'commissioner', 'summary',
          'creator', 'reliedUponTechnology',
          'essentialFunctionality', 'pageTypeVariety'
@@ -51,6 +55,11 @@ describe('model: evalModel export', function () {
             expect(exportEval[prop])
             .toEqual(importEval[prop]);
         });
+    });
+
+    it('has the latest context', function () {
+        expect(exportEval['@context'])
+        .toEqual(context);
     });
 
     it('has the same sample', function () {
@@ -75,19 +84,38 @@ describe('model: evalModel export', function () {
             return (result.outcome !== 'earl:untested' ||
                     !!result.description);
 
+        // Check if there is 1 none-empty assertion in the output
         }).forEach(function (assertOut) {
             var asserts = [];
+            // Find all asserts with the same subject & test
             exportEval.auditResult.forEach(function (assertIn) {
-                if (assertIn.subject === assertOut.subject &&
-                assertIn.testRequirement === assertOut.testRequirement) {
+                if (assertIn.test === assertOut.test &&
+                assertIn.subject === assertOut.subject) {
+                    // Remove methods & inherited properties
+                    assertIn = JSON.parse(JSON.stringify(assertIn));
                     asserts.push(assertIn);
                 }
             });
+
+            // Check there is only 1, and it has all the same properties
             expect(asserts.length).toBe(1);
             expect(asserts[0]).toEqual(assertOut);
         });
+
+        // Check the sane number of results came out as went in
         expect(exportEval.auditResult.length)
         .toBe(importEval.auditResult.length);
+    });
+
+    // Identify version of the tool used to generate the format #229
+    it('Defines the Tool version as (dct:)publisher', function () {
+        expect(exportEval.publisher)
+        .toBe('reporter:releases/tag/' + '<%= pkg.version =%>');
+    });
+
+    it('exports the current language of the tool', function () {
+        expect(exportEval.lang)
+        .toBe($rootScope.lang);
     });
 
 });

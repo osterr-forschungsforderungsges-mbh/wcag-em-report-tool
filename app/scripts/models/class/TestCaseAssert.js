@@ -23,19 +23,19 @@ angular.module('wcagReporter')
     TestCaseAssert.isDefined = function (tc) {
         var hasPage = false;
         tc.subject.forEach(function (page) {
-            hasPage = (hasPage || page.handle || page.description);
+            hasPage = (hasPage || page.title || page.description);
         });
         return ((tc.result.description || tc.result.outcome !== protoResult.outcome) && hasPage);
     };
 
     TestCaseAssert.prototype = {
-        type: 'earl:assertion',
+        type: 'Assertion',
         assertedBy: currentUser.id,
         subject: undefined,
         testCase: undefined,
         result: undefined,
         multiPage: false,
-        mode: 'manual',
+        mode: 'earl:manual',
         isDefined: function () {
             return TestCaseAssert.isDefined(this);
         },
