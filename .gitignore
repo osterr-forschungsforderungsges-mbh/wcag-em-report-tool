@@ -9,3 +9,5 @@ app/styles/bootstrap
 desktop.ini
 Thumbs.db
 /.project
+.DS_Store
+npm-debug.log
