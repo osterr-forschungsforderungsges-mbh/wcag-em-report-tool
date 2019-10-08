@@ -4,6 +4,10 @@
     "LABEL_SITE_NAME": "Website name",
     "INF_SITE_NAME": "Provide a name for the website that you would like to evaluate. For example:<br> 'Public Website of Example Organization'<br> 'Webshop of Example Company'<br> 'Intranet of Example University'",
     "LABEL_SITE_SCOPE": "Scope of the website",
+    "LABEL_APP_TYPE": "Type of application that is evaluated",
+    "INF_APP_TYPE": "Select the type of application you would like to evaluate. You can choose between 'web application' and 'mobile application'.",
+    "LABEL_REPORT_TYPE": "Type of evaluation",
+    "INF_REPORT_TYPE": "Select the type evaluation this report covers. You can choose between 'simple' and 'advanced' evaluation. A simple evaluation defines a mostly automated evaluation whereas an advanced evaluation includes manual testing.",
     "INF_SITE_SCOPE_0": "Define the scope of the website, so it is clear which web pages are included in the evaluation. For example:",
     "INF_SITE_SCOPE_LI0": "'All web content of the public website of Example Org. located at http://www.example.org'",
     "INF_SITE_SCOPE_LI1": "'All web content of the online shop of Example Org. located at http://www.example.org/shop/'",
@@ -18,5 +22,9 @@
     "INF_EXTRA_REQUIREMENTS_LI0": "'The report will include a list of all errors identified by the evaluator, rather than examples only'",
     "INF_EXTRA_REQUIREMENTS_LI1": "'The report will include a description of the problem and repair suggestions for any errors listed'",
     "INF_EXTRA_REQUIREMENTS_LI2": "'The evaluation will cover all web pages and web content of the website, rather than a selected sample only'",
-    "INF_EXTRA_REQUIREMENTS_1": "WCAG-EM Step 1.d: Define Additional Evaluation Requirements"
+    "INF_EXTRA_REQUIREMENTS_1": "WCAG-EM Step 1.d: Define Additional Evaluation Requirements",
+    "SIMPLE_REPORT": "Simple report",
+    "ADVANCED_REPORT": "Advanced report",
+    "WEB_APP": "Web application",
+    "MOBILE_APP": "Mobile application"
 }

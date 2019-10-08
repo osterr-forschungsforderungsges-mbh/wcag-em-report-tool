@@ -4,7 +4,9 @@ angular.module('wcagReporter')
 .service('evalScopeModel', function() {
     var scopeModel = {
         type: 'EvaluationScope',
-    	conformanceTarget: 'wai:WCAG2AA-Conformance',
+        reportType: '',
+        appType: '',
+    	  conformanceTarget: 'wai:WCAG2AA-Conformance',
         additionalEvalRequirement: '',
         website: {
             type: ['TestSubject', 'WebSite'],
@@ -17,6 +19,8 @@ angular.module('wcagReporter')
     scopeModel.exportData = function () {
         return {
             type: scopeModel.type,
+            reportType: scopeModel.reportType,
+            appType: scopeModel.appType,
             conformanceTarget: scopeModel.conformanceTarget,
             additionalEvalRequirement: scopeModel.additionalEvalRequirement,
             website: {
@@ -33,6 +37,16 @@ angular.module('wcagReporter')
         'wai:WCAG2A-Conformance',
         'wai:WCAG2AA-Conformance',
         'wai:WCAG2AAA-Conformance'
+    ];
+
+    scopeModel.appTypes = [
+      'app:web',
+      'app:mobile'
+    ];
+
+    scopeModel.reportTypes = [
+      'report:simple',
+      'report:advanced'
     ];
 
     /**

@@ -1,10 +1,13 @@
 {
     "BY" : "Report Creator:",
     "COMMISION_BY": "Evaluation Commissioner:",
+    "COMMISSIONER_STATE": "Evaluation commissioners state:",
     "HD_SUMMARY": "Summary of the evaluation findings",
     "HD_SCOPE": "Scope of the evaluation",
     "LABEL_SITE_NAME": "Website name",
     "LABEL_SITE_SCOPE": "Scope of the website",
+    "LABEL_APP_TYPE": "Type of application that is evaluated",
+    "LABEL_REPORT_TYPE": "Type of evaluation",
     "LABEL_CONFORMANCE_TGT": "Conformance target",
     "LABEL_EXTRA_REQUIREMENTS": "Additional evaluation requirements",
     "LABEL_SUPPORT_BASE": "Accessibility support baseline",

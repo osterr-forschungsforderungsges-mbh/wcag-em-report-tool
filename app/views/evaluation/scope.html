@@ -26,6 +26,43 @@
   </div>
 
   <div class="form-group">
+
+    <label for="app-type">
+      {{ 'SCOPE.LABEL_APP_TYPE' | translate }}&nbsp;<info-button
+      label="{{'COMMON.BTN_INFO' | translate}}" target="inf_app_type"
+      title="{{ 'SCOPE.LABEL_APP_TYPE' | translate }}"></info-button>
+    </label>
+
+    <info-field button="{{'COMMON.BTN_CLOSE_INFO' | translate}}"
+                exitto="app-type" ref="inf_app_type">
+      <p>{{ 'SCOPE.INF_APP_TYPE' | translate }}</p>
+    </info-field>
+
+    <select id="app-type" class="form-control"
+            ng-options="key as value for (key,value) in appTypes"
+            ng-model="scopeModel.appType">
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="report-type">
+      {{ 'SCOPE.LABEL_REPORT_TYPE' | translate }}&nbsp;<info-button
+      label="{{'COMMON.BTN_INFO' | translate}}" target="inf_report_type"
+      title="{{ 'SCOPE.LABEL_REPORT_TYPE' | translate }}"></info-button>
+    </label>
+
+    <info-field button="{{'COMMON.BTN_CLOSE_INFO' | translate}}"
+                exitto="report-type" ref="inf_report_type">
+      <p>{{ 'SCOPE.INF_REPORT_TYPE' | translate }}</p>
+    </info-field>
+
+    <select id="report-type" class="form-control"
+            ng-options="key as value for (key,value) in reportTypes"
+            ng-model="scopeModel.reportType">
+    </select>
+  </div>
+
+  <div class="form-group">
     <label for="website_scope">
       {{ 'SCOPE.LABEL_SITE_SCOPE' | translate }}&nbsp;<info-button
       label="{{'COMMON.BTN_INFO' | translate}}" target="inf_site_scope"

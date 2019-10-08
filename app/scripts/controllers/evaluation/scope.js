@@ -13,6 +13,18 @@ function ($scope, appState, evalScopeModel,
         return tgt;
     }, {});
 
+    $scope.appTypes = evalScopeModel.appTypes
+    .reduce(function (app, type) {
+      app[type] = $filter('rdfToLabel')(type);
+      return app;
+    }, {});
+
+    $scope.reportTypes = evalScopeModel.reportTypes
+    .reduce(function (report, type) {
+      report[type] = $filter('rdfToLabel')(type);
+      return report;
+    }, {});
+
 
     // Give the report a default title
     // (won't if one is already set)

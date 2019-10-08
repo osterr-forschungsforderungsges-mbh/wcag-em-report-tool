@@ -7,10 +7,23 @@ angular.module('wcagReporter')
         title: '',
         summary: '',
         specifics: '',
-        commissioner: ''
+        commissioner: '',
+        state: ''
     },
     reportModel = Object.create(protoModel);
     protoModel.date = $filter('date')(new Date(), 'longDate');
+
+    protoModel.states = {
+      'bgld': 'Burgenland',
+      'ktn': 'Kärnten',
+      'noe': 'Niederösterreich',
+      'ooe': 'Oberösterreich',
+      'sbg': 'Salzburg',
+      'stmk': 'Steiermark',
+      't': 'Tirol',
+      'vbg': 'Vorarlberg',
+      'w': 'Wien',
+    };
 
     reportModel.exportData = function () {
         var res = angular.copy(reportModel);
